@@ -227,6 +227,20 @@ export default defineConfig({
     lineNumbers: true,
     config: (md) => {
       md.use(mathjax3)
+
+      const defaultFence = md.renderer.rules.fence
+      md.renderer.rules.fence = (tokens, idx, options, env, self) => {
+        const token = tokens[idx]
+        const language = token.info.trim().split(/\s+/)[0]
+
+        if (language === 'mermaid') {
+          return `<Mermaid code="${encodeURIComponent(token.content)}" encoded />`
+        }
+
+        return defaultFence
+          ? defaultFence(tokens, idx, options, env, self)
+          : self.renderToken(tokens, idx, options)
+      }
     }
   },
   themeConfig: {
