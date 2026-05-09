@@ -454,6 +454,10 @@ export default defineConfig({
   },
   markdown: {
     lineNumbers: true,
+    theme: {
+      light: 'light-plus',
+      dark: 'dark-plus'
+    },
     config: (md) => {
       md.use(mathjax3)
 

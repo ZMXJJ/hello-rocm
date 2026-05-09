@@ -5,17 +5,19 @@
   --amd-highlight: #00c8ff;
 
   --vp-font-family-base:
-    "Segoe UI Variable", "Segoe UI", "PingFang SC", "Hiragino Sans GB",
-    "Noto Sans CJK SC", "Microsoft YaHei", ui-sans-serif, system-ui, sans-serif;
+    Inter, "Inter var", "SF Pro Text", "Segoe UI Variable", "Segoe UI",
+    "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC",
+    "Microsoft YaHei UI", "Microsoft YaHei", ui-sans-serif, system-ui, sans-serif;
   --vp-font-family-heading:
-    "Segoe UI Variable", "Segoe UI", "PingFang SC", "Hiragino Sans GB",
-    "Noto Sans CJK SC", "Microsoft YaHei", ui-sans-serif, system-ui, sans-serif;
+    Inter, "Inter var", "SF Pro Display", "Segoe UI Variable", "Segoe UI",
+    "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC",
+    "Microsoft YaHei UI", "Microsoft YaHei", ui-sans-serif, system-ui, sans-serif;
   --vp-font-family-mono:
     "Cascadia Code", "JetBrains Mono", "SFMono-Regular", Consolas,
     "Liberation Mono", Menlo, monospace;
 
-  --vp-layout-max-width: 1480px;
-  --vp-sidebar-width: 260px;
+  --vp-layout-max-width: 1760px;
+  --vp-sidebar-width: 320px;
   --vp-nav-height: 66px;
 
   --vp-c-bg: #f8fbfe;
