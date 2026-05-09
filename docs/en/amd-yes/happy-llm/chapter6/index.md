@@ -8,7 +8,7 @@
 
 This chapter is based on the Transformers + DeepSpeed framework and implements a full LLM pipeline on AMD ROCm, including pretraining and SFT fine-tuning. For a detailed framework introduction and training principles, see [chapter6-llm-training-workflow-practice.md](./chapter6-llm-training-workflow-practice.md).
 
-For the Chinese version, see [第六章 大模型训练流程实践.md](./第六章%20大模型训练流程实践.md).
+For the Chinese version, see [第六章 大模型训练流程实践.md](./chapter6-llm-training-workflow-practice.md).
 
 Section 6.4 (English): [chapter6-4-wip-preference-alignment.md](./chapter6-4-wip-preference-alignment.md)
 

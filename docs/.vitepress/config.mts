@@ -16,6 +16,8 @@ const enNav: DefaultTheme.NavItem[] = [
   { text: 'Environment', link: '/environment/' },
   { text: 'Deploy', link: '/deploy/' },
   { text: 'Fine-tune', link: '/fine-tune/' },
+  { text: 'Infra', link: '/infra/' },
+  { text: 'References', link: '/references' },
   { text: 'AMD Practice', link: '/amd-yes/' }
 ]
 
@@ -213,7 +215,8 @@ const enSidebar: DefaultTheme.Sidebar = {
     {
       text: '00-Environment',
       items: [
-        { text: 'ROCm Environment Setup', link: '/environment/' }
+        { text: 'ROCm Environment Setup', link: '/environment/' },
+        { text: 'GPU Architecture and pip Index Table', link: '/environment/rocm-gpu-architecture-table' }
       ]
     }
   ],
@@ -222,7 +225,36 @@ const enSidebar: DefaultTheme.Sidebar = {
     {
       text: '01-Deploy',
       items: [
-        { text: 'LLM Deployment on ROCm', link: '/deploy/' }
+        { text: 'LLM Deployment on ROCm', link: '/deploy/' },
+        {
+          text: 'models',
+          collapsed: false,
+          items: [
+            {
+              text: 'Qwen3',
+              collapsed: false,
+              items: [
+                { text: 'Ubuntu 24.04 + ROCm 7 Environment Preparation', link: '/deploy/qwen3/env-prepare-ubuntu24-rocm7' },
+                { text: 'LM Studio Deployment', link: '/deploy/qwen3/lm-studio-rocm7-deploy' },
+                { text: 'vLLM Deployment', link: '/deploy/qwen3/vllm-rocm7-deploy' },
+                { text: 'Ollama Deployment', link: '/deploy/qwen3/ollama-rocm7-deploy' },
+                { text: 'llama.cpp Deployment', link: '/deploy/qwen3/llamacpp-rocm7-deploy' }
+              ]
+            },
+            {
+              text: 'Gemma4',
+              collapsed: false,
+              items: [
+                { text: 'Ubuntu 24.04 + ROCm 7 Environment Preparation', link: '/deploy/gemma4/env-prepare-ubuntu24-rocm7' },
+                { text: 'Gemma 4 Model Introduction', link: '/deploy/gemma4/gemma4_model' },
+                { text: 'LM Studio Deployment', link: '/deploy/gemma4/lm-studio-rocm7-deploy' },
+                { text: 'vLLM Deployment', link: '/deploy/gemma4/vllm-rocm7-deploy' },
+                { text: 'Ollama Deployment', link: '/deploy/gemma4/ollama-rocm7-deploy' },
+                { text: 'llama.cpp Deployment', link: '/deploy/gemma4/llamacpp-rocm7-deploy' }
+              ]
+            }
+          ]
+        }
       ]
     }
   ],
@@ -231,7 +263,58 @@ const enSidebar: DefaultTheme.Sidebar = {
     {
       text: '02-Fine-tune',
       items: [
-        { text: 'LLM Fine-tuning on ROCm', link: '/fine-tune/' }
+        { text: 'LLM Fine-tuning on ROCm', link: '/fine-tune/' },
+        {
+          text: 'models',
+          collapsed: false,
+          items: [
+            {
+              text: 'Qwen3',
+              items: [
+                { text: 'Qwen3-0.6B LoRA and SwanLab Records', link: '/fine-tune/qwen3/qwen3-0.6b-lora-swanlab' }
+              ]
+            },
+            {
+              text: 'Gemma4',
+              items: [
+                { text: 'Gemma4-E4B LoRA and SwanLab Records', link: '/fine-tune/gemma4/gemma4-e4b-lora-swanlab' }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+
+  '/infra/': [
+    {
+      text: '03-Infra',
+      items: [
+        { text: 'ROCm Operator Optimization Practice', link: '/infra/' },
+        {
+          text: '01-embrace-amd-ai',
+          items: [
+            { text: 'Embrace the AMD AI Computing Era', link: '/infra/embrace-amd-ai' }
+          ]
+        },
+        {
+          text: '02-decode-ai-accelerator',
+          items: [
+            { text: 'Decode AI Accelerators', link: '/infra/decode-ai-accelerator' }
+          ]
+        },
+        {
+          text: '03-handwrite-rocm-operator',
+          items: [
+            { text: 'Handwrite ROCm Operators', link: '/infra/handwrite-rocm-operator' }
+          ]
+        },
+        {
+          text: '04-custom-pytorch-operator',
+          items: [
+            { text: 'Custom ROCm Operators for PyTorch', link: '/infra/custom-pytorch-operator' }
+          ]
+        }
       ]
     }
   ],
@@ -304,6 +387,15 @@ const enSidebar: DefaultTheme.Sidebar = {
         }
       ]
     }
+  ],
+
+  '/references': [
+    {
+      text: '04-References',
+      items: [
+        { text: 'ROCm References', link: '/references' }
+      ]
+    }
   ]
 }
 
@@ -350,7 +442,7 @@ export default defineConfig({
   description: 'AMD ROCm tutorials and examples',
   base: '/hello-rocm/',
   cleanUrls: true,
-  ignoreDeadLinks: true,
+  srcExclude: ['en/index.md'],
   lastUpdated: true,
   rewrites: {
     'en/:rest*': ':rest*'

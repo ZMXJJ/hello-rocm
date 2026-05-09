@@ -37,7 +37,7 @@ PyTorch 2.9.1
 ----------------
 ```
 
-> 📖 For ROCm + PyTorch base environment installation, see [00-Environment](/environment/index_en). Continue below after completing that setup.
+> 📖 For ROCm + PyTorch base environment installation, see [00-Environment](/environment/). Continue below after completing that setup.
 
 Install project-specific dependencies:
 

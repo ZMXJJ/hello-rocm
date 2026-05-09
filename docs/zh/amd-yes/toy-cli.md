@@ -29,7 +29,7 @@ LM Studio
 python 3.12
 ----------------
 ```
-> 本文默认学习者使用的是 AMD ROCm 支持的显卡 或 搭载 Ryzen AI 系列芯片 AI PC 设备，LM Studio 本地加载大模型请参考 [Getting Started with ROCm Deploy](/deploy/)
+> 本文默认学习者使用的是 AMD ROCm 支持的显卡 或 搭载 Ryzen AI 系列芯片 AI PC 设备，LM Studio 本地加载大模型请参考 [Getting Started with ROCm Deploy](/zh/deploy/)
 
 首先 `pip` 换源加速下载并安装依赖包
 

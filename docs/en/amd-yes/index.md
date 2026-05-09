@@ -15,11 +15,11 @@
 
 | Local Run (Single GPU) | Cluster Deployment (Multi-GPU) |
 |---------|---------|
-| [🧸 toy-cli](/amd-yes/toy-cli_en) ✅️ | [🚀 happy-llm](/amd-yes/happy-llm/index_en) ✅️ |
-| [🎮 WeChat Jump](/amd-yes/wechat-jump_en) ✅️| |
-| [🎭 Chat-Huanhuan](/amd-yes/huanhuan-chat_en) ✅️| |
-| [✈️ Smart Travel Planner](/amd-yes/hello-agents/index_en) ✅️| |
-| [🦞 OpenClaw Private Assistant](/amd-yes/openclaw_en) ✅️| |
+| [🧸 toy-cli](/amd-yes/toy-cli) ✅️ | [🚀 happy-llm](/amd-yes/happy-llm/) ✅️ |
+| [🎮 WeChat Jump](/amd-yes/wechat-jump) ✅️| |
+| [🎭 Chat-Huanhuan](/amd-yes/huanhuan-chat) ✅️| |
+| [✈️ Smart Travel Planner](/amd-yes/hello-agents/) ✅️| |
+| [🦞 OpenClaw Private Assistant](/amd-yes/openclaw) ✅️| |
 
 > ✅ Supported | 🚧 In progress 
 
@@ -51,7 +51,7 @@ Suitable for individual developers to quickly get started – you can do it all 
 - **Difficulty Level**: ⭐
 - **Estimated Time**: 30 minutes
 
-📖 [Start Learning toy-cli](/amd-yes/toy-cli_en)
+📖 [Start Learning toy-cli](/amd-yes/toy-cli)
 
 ---
 
@@ -63,7 +63,7 @@ Suitable for individual developers to quickly get started – you can do it all 
 - **Difficulty Level**: ⭐⭐
 - **Estimated Time**: 1 hour
 
-📖 [Start Learning WeChat Jump](/amd-yes/wechat-jump_en)
+📖 [Start Learning WeChat Jump](/amd-yes/wechat-jump)
 
 ---
 
@@ -75,19 +75,19 @@ Suitable for individual developers to quickly get started – you can do it all 
 - **Difficulty Level**: ⭐⭐
 - **Estimated Time**: 1.5 hours
 
-📖 [Start Learning Chat-Huanhuan](/amd-yes/huanhuan-chat_en)
+📖 [Start Learning Chat-Huanhuan](/amd-yes/huanhuan-chat)
 
 ---
 
 #### ✈️ Smart Travel Planner
 
-[Smart Travel Planner](/amd-yes/hello-agents/index_en) is an intelligent Agent application based on the HelloAgents framework, integrating MCP protocol to call Amap API, running large models locally on AMD GPU.
+[Smart Travel Planner](/amd-yes/hello-agents/) is an intelligent Agent application based on the HelloAgents framework, integrating MCP protocol to call Amap API, running large models locally on AMD GPU.
 
 - **Target Audience**: Developers wanting to learn Agent frameworks and MCP protocol
 - **Difficulty Level**: ⭐⭐⭐
 - **Estimated Time**: 2 hours
 
-📖 [Start Learning Smart Travel Planner](/amd-yes/hello-agents/smart-travel-planner/amd395-helloagents-smart-travel-planner-en.md)
+📖 [Start Learning Smart Travel Planner](/amd-yes/hello-agents/smart-travel-planner/amd395-helloagents-smart-travel-planner)
 
 ---
 
@@ -99,7 +99,7 @@ Suitable for individual developers to quickly get started – you can do it all 
 - **Difficulty Level**: ⭐⭐⭐
 - **Estimated Time**: 1.5 hours
 
-📖 [Start Learning OpenClaw](/amd-yes/openclaw_en)
+📖 [Start Learning OpenClaw](/amd-yes/openclaw)
 
 ---
 
@@ -117,7 +117,7 @@ Advanced usage – distributed training and deployment!
 - **Difficulty Level**: ⭐⭐⭐
 - **Estimated Time**: 3+ hours
 
-📖 [Start Learning Happy-LLM](/amd-yes/happy-llm/index_en)
+📖 [Start Learning Happy-LLM](/amd-yes/happy-llm/)
 
 ---
 

@@ -43,7 +43,7 @@ print(f"模型下载完成，保存路径为：{model_dir}")
 }
 ```
 
-所有的示例微调数据集位于 [02-Fine-tune/datasets](https://github.com/datawhalechina/hello-rocm/blob/main/src/fine-tune/datasets/huanhuan.json)
+所有的示例微调数据集位于 [02-Fine-tune/datasets](https://github.com/datawhalechina/hello-rocm/blob/main/src/zh/fine-tune/datasets/huanhuan.json)
 
 ## 数据准备
 

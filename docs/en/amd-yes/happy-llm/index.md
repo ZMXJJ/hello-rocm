@@ -61,7 +61,7 @@ Happy-LLM's complete tutorial consists of 7 chapters + 1 extra chapter, divided 
 
 Implement the LLaMA2 model with 80 million parameters entirely in pure PyTorch from zero, completing pre-training and SFT fine-tuning on AMD ROCm without relying on any training framework.
 
-📖 [Chapter Tutorial](/amd-yes/happy-llm/chapter5/chapter5-hands-on-llm-building) ｜ 🚀 [Execution Process and Script Instructions](/amd-yes/happy-llm/chapter5/index_en)
+📖 [Chapter Tutorial](/amd-yes/happy-llm/chapter5/chapter5-hands-on-llm-building) ｜ 🚀 [Execution Process and Script Instructions](/amd-yes/happy-llm/chapter5/)
 
 ---
 
@@ -69,7 +69,7 @@ Implement the LLaMA2 model with 80 million parameters entirely in pure PyTorch f
 
 Based on the Transformers + DeepSpeed framework, reproduce production-grade pre-training and SFT workflows with support for AMD ROCm multi-card distributed training and ZeRO optimization.
 
-📖 [Chapter Tutorial](/amd-yes/happy-llm/chapter6/chapter6-llm-training-workflow-practice) ｜ 🚀 [Execution Process and Script Instructions](/amd-yes/happy-llm/chapter6/index_en)
+📖 [Chapter Tutorial](/amd-yes/happy-llm/chapter6/chapter6-llm-training-workflow-practice) ｜ 🚀 [Execution Process and Script Instructions](/amd-yes/happy-llm/chapter6/)
 
 ---
 
@@ -94,7 +94,7 @@ Based on the Transformers + DeepSpeed framework, reproduce production-grade pre-
 
 ### Step 1: Environment Preparation
 
-> 📖 For ROCm + PyTorch base environment installation, see [00-Environment](/environment/index_en). Continue below after completing that setup.
+> 📖 For ROCm + PyTorch base environment installation, see [00-Environment](/environment/). Continue below after completing that setup.
 
 ```bash
 cd 04-happy-llm
@@ -104,7 +104,7 @@ uv pip install -r ./chapter5/code/requirements.txt
 uv pip install -r ./chapter6/code/requirements.txt
 ```
 
-> This project was tested with 4×AMD Radeon™ AI PRO R9700 (gfx1201). For other architectures, replace the `--index-url` in [00-Environment](/environment/index_en).
+> This project was tested with 4×AMD Radeon™ AI PRO R9700 (gfx1201). For other architectures, replace the `--index-url` in [00-Environment](/environment/).
 
 ### Step 2: Choose Your Learning Path
 

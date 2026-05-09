@@ -41,7 +41,7 @@ Ollama / LM Studio / Linglong "Smart Linglong Classmate" (choose one)
 ----------------
 ```
 
-> This guide assumes learners are using an AMD 395 AI PC or other devices with AMD ROCm support. For information about local model deployment, please refer to [Getting Started with ROCm Deploy](/deploy/index_en)
+> This guide assumes learners are using an AMD 395 AI PC or other devices with AMD ROCm support. For information about local model deployment, please refer to [Getting Started with ROCm Deploy](/deploy/)
 
 ### 1.1 Install Python Dependencies
 
@@ -262,8 +262,8 @@ smart-travel-planner/
 - [MCP Protocol Specification](https://modelcontextprotocol.io/)
 - [Amap API Documentation](https://lbs.amap.com/api/)
 - [AMD ROCm Documentation](https://rocm.docs.amd.com/)
-- [Detailed Tutorial](/amd-yes/hello-agents/smart-travel-planner/amd395-helloagents-smart-travel-planner-en.md)
-- [Chinese Tutorial](/amd-yes/hello-agents/smart-travel-planner/amd395-helloagents-smart-travel-planner-zh.md)
+- [Detailed Tutorial](/amd-yes/hello-agents/smart-travel-planner/amd395-helloagents-smart-travel-planner)
+- [Chinese Tutorial](/zh/amd-yes/hello-agents/smart-travel-planner/amd395-helloagents-smart-travel-planner)
 
 ---
 

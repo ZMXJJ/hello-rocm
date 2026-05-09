@@ -29,7 +29,7 @@ LM Studio
 python 3.12
 ----------------
 ```
-> This guide assumes that learners are using a graphics card supported by AMD ROCm or an AI PC device with Ryzen AI series chips. For loading large models locally with LM Studio, please refer to [Getting Started with ROCm Deploy](/deploy/index_en)
+> This guide assumes that learners are using a graphics card supported by AMD ROCm or an AI PC device with Ryzen AI series chips. For loading large models locally with LM Studio, please refer to [Getting Started with ROCm Deploy](/deploy/)
 
 First, switch pip sources to accelerate downloads and install dependencies
 

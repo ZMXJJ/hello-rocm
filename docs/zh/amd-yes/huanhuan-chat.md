@@ -37,7 +37,7 @@ pytorch 2.9.1
 ----------------
 ```
 
-> 📖 ROCm + PyTorch 基础环境安装请参考 [00-Environment](/environment/)，完成后再继续以下步骤。
+> 📖 ROCm + PyTorch 基础环境安装请参考 [00-Environment](/zh/environment/)，完成后再继续以下步骤。
 
 安装本项目专用依赖：
 

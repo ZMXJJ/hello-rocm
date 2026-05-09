@@ -100,7 +100,7 @@ Windows 11 / Linux
 - **基础 URL**：`http://127.0.0.1:12345/v1`
 - **模型 ID**：`gemma-4-26b-a4b`
 
-> 关于 LM Studio 详细配置，请参考 [Getting Started with ROCm Deploy](/deploy/)
+> 关于 LM Studio 详细配置，请参考 [Getting Started with ROCm Deploy](/zh/deploy/)
 
 ## Step 3: 安装 OpenClaw (ClawX)
 

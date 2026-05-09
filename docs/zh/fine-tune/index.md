@@ -1,6 +1,6 @@
 # Fine-tune
 
-[English](index_en) | [返回主页](/)
+[English](/fine-tune/) | [返回主页](/zh/)
 
 本章节收录整理在 AMD GPU / ROCm 环境下进行大模型微调的资料、通用教程与模型实战记录，帮助学习者从环境配置、数据集构造、LoRA 微调到权重合并，完整理解和实践大模型微调流程。
 
@@ -8,8 +8,8 @@
 
 | 模型案例 | 说明 | 文档 |
 |:---|:---|:---|
-| Qwen3-0.6B-LoRA | 使用 Qwen3-0.6B 进行 LoRA 微调，并结合 SwanLab 记录训练过程 | [查看记录](/fine-tune/qwen3/qwen3-0.6b-lora-swanlab.md) |
-| Gemma4-E4B-LoRA | 基于 `dair-ai/emotion` 数据集微调 Gemma 4 E4B-it | [查看记录](/fine-tune/gemma4/gemma4-e4b-lora-swanlab.md) |
+| Qwen3-0.6B-LoRA | 使用 Qwen3-0.6B 进行 LoRA 微调，并结合 SwanLab 记录训练过程 | [查看记录](/zh/fine-tune/qwen3/qwen3-0.6b-lora-swanlab.md) |
+| Gemma4-E4B-LoRA | 基于 `dair-ai/emotion` 数据集微调 Gemma 4 E4B-it | [查看记录](/zh/fine-tune/gemma4/gemma4-e4b-lora-swanlab.md) |
 
 欢迎大家提出建议和贡献内容，一起补充更多适合端侧部署与 AMD GPU 微调实验的模型案例。
 
@@ -23,9 +23,9 @@
 
 ### 环境配置
 
-本章主要说明微调所需的 Python 虚拟环境与训练依赖安装。ROCm 基础环境、Windows/Ubuntu 前置条件、驱动版本、Visual Studio、GPU 架构映射等更完整细节，请参考 [00-Environment](/environment/)。
+本章主要说明微调所需的 Python 虚拟环境与训练依赖安装。ROCm 基础环境、Windows/Ubuntu 前置条件、驱动版本、Visual Studio、GPU 架构映射等更完整细节，请参考 [00-Environment](/zh/environment/)。
 
-如果你使用的是 Windows + Ryzen AI Max+ 395，可以重点参考 [Windows 11 安装](/environment/#一windows-11-安装) 和 [安装 ROCm + PyTorch](/environment/#15-安装-rocm--pytorch) 两节。ROCm 7.12.0 之后的版本支持通过 pip/uv pip 将 ROCm 相关库安装到 Python 虚拟环境中，极大简化了安装流程。
+如果你使用的是 Windows + Ryzen AI Max+ 395，可以重点参考 [Windows 11 安装](/zh/environment/#一windows-11-安装) 和 [安装 ROCm + PyTorch](/zh/environment/#15-安装-rocm--pytorch) 两节。ROCm 7.12.0 之后的版本支持通过 pip/uv pip 将 ROCm 相关库安装到 Python 虚拟环境中，极大简化了安装流程。
 
 ![alt text](/images/fine-tune/rocm.png)
 

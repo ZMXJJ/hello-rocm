@@ -23,9 +23,9 @@ The example environment is based on AMD Ryzen AI Max+ 395. Although this machine
 
 ### Environment Setup
 
-This section focuses on the Python virtual environment and training dependencies. For ROCm base installation, Windows/Ubuntu prerequisites, driver versions, Visual Studio requirements, and GPU architecture mapping, refer to [00-Environment](/environment/index_en).
+This section focuses on the Python virtual environment and training dependencies. For ROCm base installation, Windows/Ubuntu prerequisites, driver versions, Visual Studio requirements, and GPU architecture mapping, refer to [00-Environment](/environment/).
 
-For Windows + Ryzen AI Max+ 395, see [Windows 11 Installation](/environment/index_en#1-windows-11-installation) and [Install ROCm + PyTorch](/environment/index_en#15-install-rocm--pytorch). ROCm 7.12.0 and later support installing ROCm-related Python packages into a virtual environment via pip / uv pip.
+For Windows + Ryzen AI Max+ 395, see [Windows 11 Installation](/environment/#1-windows-11-installation) and [Install ROCm + PyTorch](/environment/#15-install-rocm--pytorch). ROCm 7.12.0 and later support installing ROCm-related Python packages into a virtual environment via pip / uv pip.
 
 ![ROCm screenshot](/images/fine-tune/rocm.png)
 

@@ -100,7 +100,7 @@ Search and download the GGUF version in LM Studio, then note:
 - **Base URL**: `http://127.0.0.1:12345/v1`
 - **Model ID**: `gemma-4-26b-a4b`
 
-> For detailed LM Studio configuration, refer to [Getting Started with ROCm Deploy](/deploy/index_en)
+> For detailed LM Studio configuration, refer to [Getting Started with ROCm Deploy](/deploy/)
 
 ## Step 3: Install OpenClaw (ClawX)
 

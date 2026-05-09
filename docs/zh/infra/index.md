@@ -7,7 +7,7 @@
 
 *从 AMD AI 硬件全景到 HIP 算子与性能分析*
 
-[返回主页](/)
+[返回主页](/zh/)
 
 </div>
 
@@ -47,7 +47,7 @@
 - **难度等级**：⭐⭐
 - **预计时间**：2～3 小时
 
-📖 [阅读第 1 章](/infra/embrace-amd-ai)
+📖 [阅读第 1 章](/zh/infra/embrace-amd-ai)
 
 ---
 
@@ -59,7 +59,7 @@
 - **难度等级**：⭐⭐⭐
 - **预计时间**：3～4 小时
 
-📖 [阅读第 2 章](/infra/decode-ai-accelerator)
+📖 [阅读第 2 章](/zh/infra/decode-ai-accelerator)
 
 ---
 
@@ -71,7 +71,7 @@
 - **难度等级**：⭐⭐⭐
 - **预计时间**：2～3 小时
 
-📖 [阅读第 3 章](/infra/handwrite-rocm-operator)
+📖 [阅读第 3 章](/zh/infra/handwrite-rocm-operator)
 
 ---
 
@@ -83,7 +83,7 @@
 - **难度等级**：⭐⭐⭐⭐
 - **预计时间**：3～4 小时
 
-📖 [阅读第 4 章](/infra/custom-pytorch-operator)
+📖 [阅读第 4 章](/zh/infra/custom-pytorch-operator)
 
 ---
 

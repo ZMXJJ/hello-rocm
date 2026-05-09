@@ -8,25 +8,25 @@ hero:
   actions:
     - theme: brand
       text: 开始学习
-      link: /environment/
+      link: /zh/environment/
     - theme: alt
       text: 参考资料
-      link: /references
+      link: /zh/references
 
 features:
   - title: 环境安装
     details: Windows 与 Ubuntu 上的 ROCm 基础环境安装和校验。
-    link: /environment/
+    link: /zh/environment/
   - title: 模型部署
     details: ROCm 平台上的大模型本地部署教程。
-    link: /deploy/
+    link: /zh/deploy/
   - title: 模型微调
     details: ROCm 环境下的大模型微调案例与说明。
-    link: /fine-tune/
+    link: /zh/fine-tune/
   - title: Infra
     details: ROCm 软件栈、算子编程和优化实践。
-    link: /infra/
+    link: /zh/infra/
   - title: AMD-YES
     details: 面向 AMD 平台的社区项目和实践案例。
-    link: /amd-yes/
+    link: /zh/amd-yes/
 ---

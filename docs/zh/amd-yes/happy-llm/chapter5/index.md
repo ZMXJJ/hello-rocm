@@ -6,7 +6,7 @@
 
 </div>
 
-本章将从零实现一个 8000 万参数、LLaMA2 架构的语言模型，并在 AMD ROCm 平台上完成预训练与 SFT 微调。详细原理与代码解读可参考[第五章 动手搭建大模型.md](./第五章%20动手搭建大模型.md)。
+本章将从零实现一个 8000 万参数、LLaMA2 架构的语言模型，并在 AMD ROCm 平台上完成预训练与 SFT 微调。详细原理与代码解读可参考[第五章 动手搭建大模型.md](./chapter5-hands-on-llm-building.md)。
 
 对应英文教程：[chapter5-hands-on-llm-building.md](./chapter5-hands-on-llm-building.md)
 

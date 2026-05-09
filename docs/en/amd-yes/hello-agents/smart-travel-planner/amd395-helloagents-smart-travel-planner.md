@@ -60,5 +60,5 @@ The generated result is saved as Markdown (example: [hangzhou-3-day-mcp.md](http
 
 ## Notes
 
-The Chinese tutorial is available as [amd395-helloagents-smart-travel-planner-zh.md](./amd395-helloagents-smart-travel-planner-zh.md).
+The Chinese tutorial is available as [amd395-helloagents-smart-travel-planner-zh.md](/zh/amd-yes/hello-agents/smart-travel-planner/amd395-helloagents-smart-travel-planner).
 

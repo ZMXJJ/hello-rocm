@@ -6,7 +6,7 @@
 
 </div>
 
-本章基于 Transformers + DeepSpeed 框架，在 AMD ROCm 上实现完整的大模型训练流程，覆盖预训练与 SFT 微调。有关框架介绍与训练原理的详细说明，请参考[第六章 大模型训练流程实践.md](./第六章%20大模型训练流程实践.md)。
+本章基于 Transformers + DeepSpeed 框架，在 AMD ROCm 上实现完整的大模型训练流程，覆盖预训练与 SFT 微调。有关框架介绍与训练原理的详细说明，请参考[第六章 大模型训练流程实践.md](./chapter6-llm-training-workflow-practice.md)。
 
 对应英文教程：[chapter6-llm-training-workflow-practice.md](./chapter6-llm-training-workflow-practice.md)
 

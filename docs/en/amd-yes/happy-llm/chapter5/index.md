@@ -8,7 +8,7 @@
 
 In this chapter, we implement an 80M-parameter LLaMA2-architecture language model from scratch, and complete pretraining plus SFT fine-tuning on the AMD ROCm platform. For detailed principles and code walkthroughs, see [chapter5-hands-on-llm-building.md](./chapter5-hands-on-llm-building.md).
 
-For the Chinese version, see [第五章 动手搭建大模型.md](./第五章%20动手搭建大模型.md).
+For the Chinese version, see [第五章 动手搭建大模型.md](./chapter5-hands-on-llm-building.md).
 
 ---
 
