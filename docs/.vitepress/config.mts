@@ -402,6 +402,9 @@ const enSidebar: DefaultTheme.Sidebar = {
 const zhThemeConfig: DefaultTheme.Config = {
   nav: zhNav,
   sidebar: zhSidebar,
+  socialLinks: [
+    { icon: 'github', link: 'https://github.com/datawhalechina/hello-rocm' }
+  ],
   search: {
     provider: 'local'
   },
@@ -421,6 +424,9 @@ const zhThemeConfig: DefaultTheme.Config = {
 const enThemeConfig: DefaultTheme.Config = {
   nav: enNav,
   sidebar: enSidebar,
+  socialLinks: [
+    { icon: 'github', link: 'https://github.com/datawhalechina/hello-rocm' }
+  ],
   search: {
     provider: 'local'
   },
