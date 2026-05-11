@@ -29,13 +29,13 @@
 
 &emsp;&emsp;منذ **ROCm 7.10.0** (الذي صدر في 11 ديسمبر 2025)، يمكن تثبيت ROCm بسلاسة في البيئات الافتراضية Python تمامًا مثل CUDA، مع دعم رسمي لكل من **Linux وWindows**. هذه خطوة كبيرة من AMD في مجال الذكاء الاصطناعي: لم يعد المتعلمون وعشاق LLM مقيدين بأجهزة NVIDIA—بطاقات AMD GPU أصبحت خيارًا قويًا وعمليًا.
 
-&emsp;&emsp;التزمت AMD بدورة إصدار ROCm مدتها **حوالي ستة أسابيع** مع تركيز قوي على الذكاء الاصطناعي. خارطة الطريق مثيرة.
+&emsp;&emsp;ومع ذلك، فإن خفض حاجز الأجهزة لا يعني تلقائيًا توضيح مسار التعلم. بالنسبة للمتعلمين الذين لديهم بالفعل أساسيات LLM ويريدون تطبيقها على معالجات AMD الرسومية، فإن التحديات الحقيقية تبدأ للتو: كيفية نشر نموذج على معالج AMD الرسومي؟ كيفية الضبط الدقيق والتدريب على ذلك؟ كيفية فهم نظام برمجة GPU الخاص بـ ROCm وإكمال الترحيل من CUDA إلى ROCm؟ وفي النهاية، كيفية جمع كل هذه القدرات معًا في تطبيق ذكاء اصطناعي حقيقي وعملي؟
 
-&emsp;&emsp;لا تزال هناك نقص في الدروس المنهجية على مستوى العالم حول استدلال LLM ونشره وتدريبه وضبطه الدقيق وموضوعات البنية التحتية باستخدام ROCm. مشروع **hello-rocm** موجود لسد هذه الفجوة.
+&emsp;&emsp;ولد **hello-rocm** بالضبط لهذا المسار. يغطي هذا المشروع بشكل منهجي سلسلة الاستخدام الكاملة للنماذج الكبيرة على منصة AMD ROCm، ويأخذك من تشغيل نموذجك الأول إلى بناء تطبيقات ذكاء اصطناعي حقيقية على معالجات AMD الرسومية، من خلال كل خطوة رئيسية بما في ذلك الضبط الدقيق والتدريب وبرمجة GPU—مما يجعل معالج AMD الرسومي ليس مجرد بطاقة رسومات، بل نقطة انطلاقك الحقيقية إلى عالم تطوير الذكاء الاصطناعي.
 
 &emsp;&emsp;**هذا المشروع هو في الأساس دروس تعليمية** حتى يتمكن الطلاب والممارسون المستقبليون من تعلم AMD ROCm بطريقة منظمة. **نرحب بأي شخص لفتح مشكلات أو تقديم طلبات سحب** للمساهمة في نمو المشروع وصيانته معًا.
 
-> &emsp;&emsp;***مسار التعلم: أكمل [00-Environment](../../docs/en/00-environment/index.md) أولاً (ROCm + PyTorch + **uv**)، ثم النشر والضبط الدقيق، وأخيرًا موضوعات Infra / مستوى المشغل. بعد أن تعمل بيئتك، يعد LM Studio أو vLLM نقطة بداية جيدة.***
+> &emsp;&emsp;***مسار التعلم: أكمل [00-Environment](../../docs/en/00-environment/index.md) أولاً (ROCm + PyTorch + **uv**)، ثم النشر والضبط الدقيق، وأخيرًا تحسين المشغلات وبرمجة GPU. بعد أن تعمل بيئتك، يعد LM Studio أو vLLM نقطة بداية جيدة.***
 
 ### hello-rocm Skill: استخدم هذا المشروع داخل مساعد الذكاء الاصطناعي
 
@@ -45,7 +45,7 @@
 Use src/hello-rocm-skill in the current repository as the hello-rocm Skill. If your tool supports Skills, Rules, or Agent configuration, install or load it in the appropriate place, such as .claude/skills, .cursor/skills, or .agents/skills, then use that Skill to help me learn, deploy, and troubleshoot AMD ROCm.
 ```
 
-&emsp;&emsp;راجع [دليل hello-rocm Skill](../../docs/en/04-references/index.md#hello-rocm-skill).
+&emsp;&emsp;جرب السؤال: هل يدعم معالج AMD الرسومي الخاص بي ROCm؟ ما هو أسرع مسار لتشغيل أول LLM محلي لي؟ كيفية تثبيت vLLM/Ollama/llama.cpp على ROCm؟ كيفية تصحيح `torch.cuda.is_available()` الذي يعيد False؟ راجع [دليل hello-rocm Skill](../../docs/en/04-references/index.md#hello-rocm-skill).
 
 ### آخر التحديثات
 
@@ -123,12 +123,17 @@ Use src/hello-rocm-skill in the current repository as the hello-rocm Skill. If y
 
 ```
 hello-rocm/
-├── 00-Environment/         # تثبيت وتكوين ROCm الأساسي
-├── 01-Deploy/              # نشر نماذج اللغة الكبيرة على ROCm
-├── 02-Fine-tune/           # ضبط دقيق لنماذج اللغة الكبيرة على ROCm
-├── 03-Infra/               # البنية التحتية / المشغلات على ROCm
-├── 04-References/          # مراجع ROCm منسقة
-└── 05-AMD-YES/             # عروض مشاريع مجتمع AMD
+├── docs/                   # مصدر وثائق VitePress
+│   ├── zh/                 # الوثائق الصينية
+│   │   ├── 00-environment/ # تثبيت وتكوين ROCm الأساسي
+│   │   ├── 01-deploy/      # نشر LLM على ROCm
+│   │   ├── 02-fine-tune/   # ضبط دقيق لـ LLM على ROCm
+│   │   ├── 03-infra/       # تحسين المشغلات وبرمجة GPU
+│   │   ├── 04-references/  # مراجع ROCm منسقة
+│   │   └── 05-amd-yes/     # عروض مشاريع AMD المجتمعية
+│   └── en/                 # الوثائق الإنجليزية
+├── src/                    # الكود المصدري والنصوص البرمجية
+└── assets/                 # الأصول المشتركة
 ```
 
 ### 00. البيئة — أساس ROCm

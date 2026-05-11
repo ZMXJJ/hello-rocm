@@ -29,13 +29,13 @@
 
 &emsp;&emsp;**ROCm 7.10.0**（2025年12月11日リリース）以降、ROCmはCUDAと同様にPython仮想環境にシームレスにインストールでき、**LinuxとWindowsの両方**を公式サポートしています。これはAMDにとってAI分野における大きな一歩です。学習者やLLM愛好家はもはやNVIDIAハードウェアに制限されることなく、AMD GPUが強力で実用的な選択肢となります。
 
-&emsp;&emsp;AMDは**約6週間**のROCmリリースサイクルを約束しており、AIに重点を置いています。ロードマップは非常にエキサイティングです。
+&emsp;&emsp;しかし、ハードウェアの敷居が下がったからといって、学習パスが自動的に明確になるわけではありません。すでに大規模モデルの基礎を持ち、AMD GPU上で実践したい学習者にとって、本当の課題はここから始まります：AMD GPU上でモデルをどうデプロイするか？その上でどうファインチューニングやトレーニングを行うか？ROCmのGPUプログラミング体系をどう理解し、CUDAからROCmへの移行をどう完了するか？最終的に、これらの能力をどう統合して実際に動くAIアプリケーションにするか？
 
-&emsp;&emsp;しかし、世界中でROCmを用いたLLMの推論、デプロイ、トレーニング、ファインチューニング、インフラに関する体系的なチュートリアルは依然として不足しています。**hello-rocm**はそのギャップを埋めるために存在します。
+&emsp;&emsp;**hello-rocm**はまさにこのパスのために生まれました。本プロジェクトはAMD ROCmプラットフォーム上での大規模モデルの完全な使用チェーンを体系的にカバーし、**最初のモデルを動かす**ところから**AMD GPU上で実際のAIアプリケーションを構築する**ところまで、ファインチューニング・トレーニングからGPUプログラミングまでの各重要ステップを案内します——AMD GPUを単なるグラフィックカードではなく、AI開発の世界への真の出発点にします。
 
 &emsp;&emsp;**このプロジェクトは主にチュートリアル**であり、学生や将来の実務者がAMD ROCmを体系的に学べるようにするものです。**どなたでもIssueの作成やプルリクエストの送信を歓迎します**。プロジェクトを共に成長させ、維持していきましょう。
 
-> &emsp;&emsp;***学習パス: まず[00-環境設定](../../docs/en/00-environment/index.md)（ROCm + PyTorch + **uv**）を完了し、次にデプロイとファインチューニング、最後にインフラ/オペレーターレベルのトピックに進みます。環境が動作したら、LM StudioまたはvLLMから始めるのが良いでしょう。***
+> &emsp;&emsp;***学習パス: まず[00-環境設定](../../docs/en/00-environment/index.md)（ROCm + PyTorch + **uv**）を完了し、次にデプロイとファインチューニング、最後にオペレーター最適化とGPUプログラミングを探求します。環境が動作したら、LM StudioまたはvLLMから始めるのが良いでしょう。***
 
 ### hello-rocm Skill：AIアシスタントで本プロジェクトを使う
 
@@ -45,7 +45,7 @@
 Use src/hello-rocm-skill in the current repository as the hello-rocm Skill. If your tool supports Skills, Rules, or Agent configuration, install or load it in the appropriate place, such as .claude/skills, .cursor/skills, or .agents/skills, then use that Skill to help me learn, deploy, and troubleshoot AMD ROCm.
 ```
 
-&emsp;&emsp;詳しくは [hello-rocm Skill guide](../../docs/en/04-references/index.md#hello-rocm-skill) を参照してください。
+&emsp;&emsp;こんな質問ができます：私のAMD GPUはROCmに対応していますか？最速でローカルLLMを動かすにはどの記事を見ればいいですか？vLLM / Ollama / llama.cppをROCm上でどうインストールしますか？`torch.cuda.is_available()`がFalseを返す場合のデバッグ方法は？詳しくは[hello-rocm Skillガイド](../../docs/en/04-references/index.md#hello-rocm-skill)を参照してください。
 
 ### 最新情報
 
@@ -123,12 +123,17 @@ Use src/hello-rocm-skill in the current repository as the hello-rocm Skill. If y
 
 ```
 hello-rocm/
-├── 00-Environment/         # ROCmベースラインのインストールと設定
-├── 01-Deploy/              # ROCm上でのLLMデプロイ
-├── 02-Fine-tune/           # ROCm上でのLLMファインチューニング
-├── 03-Infra/               # ROCm上のインフラ/オペレーター
-├── 04-References/          # 厳選されたROCmリファレンス
-└── 05-AMD-YES/             # コミュニティAMDプロジェクトの紹介
+├── docs/                   # VitePress ドキュメントソース
+│   ├── zh/                 # 中文ドキュメント
+│   │   ├── 00-environment/ # ROCmベースラインのインストールと設定
+│   │   ├── 01-deploy/      # ROCm上でのLLMデプロイ
+│   │   ├── 02-fine-tune/   # ROCm上でのLLMファインチューニング
+│   │   ├── 03-infra/       # オペレーター最適化 & GPUプログラミング
+│   │   ├── 04-references/  # 厳選されたROCmリファレンス
+│   │   └── 05-amd-yes/     # コミュニティAMDプロジェクトの紹介
+│   └── en/                 # English docs
+├── src/                    # ソースコードとスクリプト
+└── assets/                 # 共有アセット
 ```
 
 ### 00. 環境 — ROCmベースライン

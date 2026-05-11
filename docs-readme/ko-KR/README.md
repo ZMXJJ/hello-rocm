@@ -29,13 +29,13 @@
 
 &emsp;&emsp;**ROCm 7.10.0** (2025년 12월 11일 출시)부터 ROCm은 CUDA처럼 Python 가상 환경에 원활하게 설치할 수 있으며, **Linux와 Windows** 모두 공식 지원합니다. 이는 AMD의 AI 분야에서 중요한 진전입니다. 학습자와 LLM 애호가들은 더 이상 NVIDIA 하드웨어에 제한되지 않으며, AMD GPU는 강력하고 실용적인 선택지가 되었습니다.
 
-&emsp;&emsp;AMD는 약 **6주 간격**의 ROCm 릴리스 주기를 약속하며 AI에 중점을 두고 있습니다. 로드맵은 매우 흥미롭습니다.
+&emsp;&emsp;그러나 하드웨어 진입 장벽이 낮아졌다고 해서 학습 경로가 자동으로 명확해지는 것은 아닙니다. 이미 대규모 모델의 기초를 갖추고 AMD GPU에서 실천하고자 하는 학습자에게 진짜 문제는 이제 시작입니다: AMD GPU에서 모델을 어떻게 배포할 것인가? 그 위에서 파인튜닝과 훈련을 어떻게 할 것인가? ROCm의 GPU 프로그래밍 체계를 어떻게 이해하고 CUDA에서 ROCm으로의 마이그레이션을 어떻게 완료할 것인가? 최종적으로 이러한 역량을 어떻게 모아서 실제로 작동하는 AI 애플리케이션으로 만들 것인가?
 
-&emsp;&emsp;전 세계적으로 ROCm LLM 추론, 배포, 학습, 파인튜닝 및 인프라 주제에 대한 체계적인 튜토리얼이 여전히 부족합니다. **hello-rocm**은 이러한 격차를 해소하기 위해 존재합니다.
+&emsp;&emsp;**hello-rocm**은 바로 이 경로를 위해 탄생했습니다. 본 프로젝트는 AMD ROCm 플랫폼에서의 대규모 모델 전체 사용 체인을 체계적으로 다루며, **첫 번째 모델을 실행하는 것**부터 **AMD GPU에서 실제 AI 애플리케이션을 구축하는 것**까지, 파인튜닝·훈련부터 GPU 프로그래밍까지의 모든 핵심 단계를 안내합니다—AMD GPU를 단순한 그래픽 카드가 아닌 AI 개발 세계로의 진정한 출발점으로 만듭니다.
 
 &emsp;&emsp;**이 프로젝트는 주로 튜토리얼**로 구성되어 있어 학생과 미래 실무자들이 AMD ROCm을 체계적으로 학습할 수 있습니다. **누구든지 이슈를 열거나 풀 리퀘스트를 제출**하여 프로젝트를 함께 성장시키고 유지할 수 있습니다.
 
-> &emsp;&emsp;***학습 경로: [00-환경설정](../../docs/en/00-environment/index.md)을 먼저 완료하세요 (ROCm + PyTorch + **uv**), 그 다음 배포와 파인튜닝, 마지막으로 Infra/연산자 수준 주제를 다루세요. 환경이 준비되면 LM Studio나 vLLM이 시작하기 좋은 곳입니다.***
+> &emsp;&emsp;***학습 경로: [00-환경설정](../../docs/en/00-environment/index.md)을 먼저 완료하세요 (ROCm + PyTorch + **uv**), 그 다음 배포와 파인튜닝, 마지막으로 오퍼레이터 최적화와 GPU 프로그래밍 주제를 다루세요. 환경이 준비되면 LM Studio나 vLLM이 시작하기 좋은 곳입니다.***
 
 ### hello-rocm Skill: AI 도우미에서 이 프로젝트 사용하기
 
@@ -45,7 +45,7 @@
 Use src/hello-rocm-skill in the current repository as the hello-rocm Skill. If your tool supports Skills, Rules, or Agent configuration, install or load it in the appropriate place, such as .claude/skills, .cursor/skills, or .agents/skills, then use that Skill to help me learn, deploy, and troubleshoot AMD ROCm.
 ```
 
-&emsp;&emsp;자세한 내용은 [hello-rocm Skill guide](../../docs/en/04-references/index.md#hello-rocm-skill)를 참고하세요.
+&emsp;&emsp;이렇게 물어보세요: 제 AMD GPU가 ROCm을 지원하나요? 로컬 LLM을 가장 빨리 실행하려면 어떤 글을 봐야 하나요? ROCm에서 vLLM / Ollama / llama.cpp를 어떻게 설치하나요? `torch.cuda.is_available()`이 False를 반환할 때 어떻게 디버깅하나요? 자세한 내용은 [hello-rocm Skill 가이드](../../docs/en/04-references/index.md#hello-rocm-skill)를 참조하세요.
 
 ### 최신 업데이트
 
@@ -123,12 +123,17 @@ Use src/hello-rocm-skill in the current repository as the hello-rocm Skill. If y
 
 ```
 hello-rocm/
-├── 00-Environment/         # ROCm 기본 설치 및 설정
-├── 01-Deploy/              # ROCm에서의 LLM 배포
-├── 02-Fine-tune/           # ROCm에서의 LLM 미세 조정
-├── 03-Infra/               # ROCm에서의 인프라 / 연산자
-├── 04-References/          # 선별된 ROCm 참고 자료
-└── 05-AMD-YES/             # 커뮤니티 AMD 프로젝트 쇼케이스
+├── docs/                   # VitePress 문서 소스
+│   ├── zh/                 # 중국어 문서
+│   │   ├── 00-environment/ # ROCm 기본 환경 설치 및 설정
+│   │   ├── 01-deploy/      # ROCm LLM 배포
+│   │   ├── 02-fine-tune/   # ROCm LLM 파인튜닝
+│   │   ├── 03-infra/       # 오퍼레이터 최적화 & GPU 프로그래밍
+│   │   ├── 04-references/  # 엄선된 ROCm 참고 자료
+│   │   └── 05-amd-yes/     # 커뮤니티 AMD 프로젝트 쇼케이스
+│   └── en/                 # English docs
+├── src/                    # 소스 코드 및 스크립트
+└── assets/                 # 공유 에셋
 ```
 
 ### 00. 환경 — ROCm 베이스라인

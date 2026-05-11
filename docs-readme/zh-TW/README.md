@@ -9,8 +9,8 @@
 
 <p align="center">
   <a href="../../README_en.md"><img alt="English" src="https://img.shields.io/badge/English-d9d9d9"></a>
-  <a href="../../README.md"><img alt="簡體中文" src="https://img.shields.io/badge/簡體中文-d9d9d9"></a>
-  <a href="README.md"><img alt="繁體中文" src="https://img.shields.io/badge/繁體中文-d9d9d9"></a>
+  <a href="README.md"><img alt="簡體中文" src="https://img.shields.io/badge/簡體中文-d9d9d9"></a>
+  <a href="../zh-TW/README.md"><img alt="繁體中文" src="https://img.shields.io/badge/繁體中文-d9d9d9"></a>
   <a href="../ja-JP/README.md"><img alt="日本語" src="https://img.shields.io/badge/日本語-d9d9d9"></a>
   <a href="../es-ES/README.md"><img alt="Español" src="https://img.shields.io/badge/Español-d9d9d9"></a>
   <a href="../fr-FR/README.md"><img alt="Français" src="https://img.shields.io/badge/Français-d9d9d9"></a>
@@ -23,29 +23,29 @@
 </div>
 <div align="center">
 
-<a href="https://datawhalechina.github.io/hello-rocm/"><img src="https://img.shields.io/badge/hello--rocm_完整教程-線上體驗-ed1941?logo=amd&logoColor=white&labelColor=1a1a1a" height="25"></a>
+<a href="https://datawhalechina.github.io/hello-rocm/"><img src="https://img.shields.io/badge/hello--rocm_完整教程-在線體驗-ed1941?logo=amd&logoColor=white&labelColor=1a1a1a" height="25"></a>
 
 </div>
 
-&emsp;&emsp;自 **ROCm 7.10.0** (2025年12月11日發布) 以來，ROCm 已支持像 CUDA 一樣在 Python 虛擬環境中無縫安裝，並正式支持 **Linux 和 Windows** 雙系統。這標誌著 AMD 在 AI 領域的重大突破——學習者與大模型愛好者在硬體選擇上不再局限於 NVIDIA，AMD GPU 正成為一個強有力的競爭選擇。
+&emsp;&emsp;自 **ROCm 7.10.0** (2025年12月11日發布) 以來，ROCm 已支持像 CUDA 一樣在 Python 虛擬環境中無縫安裝，並正式支持 **Linux 和 Windows** 雙系統。這標誌著 AMD 在 AI 領域的重大突破——學習者與大模型愛好者在硬件選擇上不再局限於 NVIDIA，AMD GPU 正成為一個強有力的競爭選擇。
 
-&emsp;&emsp;蘇媽在發布會上宣布 ROCm 將保持 **每 6 周一個新版本** 的迭代節奏，並全力轉向 AI 領域。前景令人振奮！
+&emsp;&emsp;然而，**硬件門檻的降低並不意味著學習路徑自動清晰**。對於已經具備大模型基礎、希望在 AMD GPU 上付諸實踐的學習者來說，真正的問題才剛剛開始：如何在 AMD GPU 上把一個模型部署起來？如何在此基礎上對模型進行微調與訓練？如何理解 ROCm 的 GPU 編程體系、完成從 CUDA 到 ROCm 的遷移？最終，這些能力又如何匯聚成一個可以落地運行的 AI 應用？
 
-&emsp;&emsp;然而，目前全球範圍內缺乏系統的 ROCm 大模型推理、部署、訓練、微調及 Infra 的學習教程。**hello-rocm** 應運而生，旨在填補這一空白。
+&emsp;&emsp;**hello-rocm** 正是為這條路徑而生。本項目系統覆蓋 AMD ROCm 平台上大模型的完整使用鏈路，帶你從**把第一個模型跑起來**，走到**在 AMD GPU 上構建真實 AI 應用**，中間經過微調訓練與 GPU 編程的每一個關鍵環節——讓 AMD GPU 不只是一塊顯卡，而是你進入 AI 開發世界的真實起點。
 
 &emsp;&emsp;**項目的主要內容就是教程，讓更多的學生和未來的從業者了解和熟悉 AMD ROCm 的使用方法！任何人都可以提出 issue 或是提交 PR，共同構建維護這個項目。**
 
-> &emsp;&emsp;***學習建議：建議先完成 [00-Environment](../../docs/zh/00-environment/index.md) 中的環境安裝（ROCm + PyTorch + uv），再學習部署與微調，最後探索 Infra 算子優化。初學者可在環境就緒後從 LM Studio 或 vLLM 部署開始。***
+> &emsp;&emsp;***學習建議：建議先完成 [00-Environment](../../docs/zh/00-environment/index.md) 中的環境安裝（ROCm + PyTorch + uv），再學習部署與微調，最後探索算子優化與 GPU 編程。初學者可在環境就緒後從 LM Studio 或 vLLM 部署開始。***
 
 ### hello-rocm Skill：把本項目裝進你的 AI 助手
 
-&emsp;&emsp;如果你使用支援 Skills、Rules 或 Agent 配置的 AI 編程工具，可以直接使用本項目內置的 **hello-rocm Skill**。它會根據本倉庫的目錄結構、Reference 索引、GPU 架構表、部署教程和排障清單，為你定位到具體文檔與官方鏈接。
+&emsp;&emsp;如果你使用支持 Skills、Rules 或 Agent 配置的 AI 編程工具，可以直接使用本項目內置的 **hello-rocm Skill**。它會根據本倉庫的目錄結構、Reference 索引、GPU 架構表、部署教程和排障清單，為你定位到具體文檔與官方鏈接。
 
 ```text
-請使用當前倉庫的 src/hello-rocm-skill 作為 hello-rocm Skill；如果你的工具支援 Skills、Rules 或 Agent 配置，請把它安裝或載入到合適位置（例如 .claude/skills、.cursor/skills 或 .agents/skills），然後根據該 Skill 幫我學習、部署和排查 AMD ROCm。
+請使用當前倉庫的 src/hello-rocm-skill 作為 hello-rocm Skill；如果你的工具支持 Skills、Rules 或 Agent 配置，請把它安裝或加載到合適位置（例如 .claude/skills、.cursor/skills 或 .agents/skills），然後根據該 Skill 幫我學習、部署和排查 AMD ROCm。
 ```
 
-&emsp;&emsp;更多說明見 [hello-rocm Skill 使用指南](../../docs/zh/04-references/index.md#hello-rocm-skill)。
+&emsp;&emsp;你可以這樣問：我的 AMD GPU 能不能跑 ROCm？我想最快跑通一個本地大模型應該看哪篇？vLLM / Ollama / llama.cpp 在 ROCm 上怎麼裝？`torch.cuda.is_available()` 返回 False 怎麼排查？更多說明見 [hello-rocm Skill 使用指南](../../docs/zh/04-references/index.md#hello-rocm-skill)。
 
 ### 最新動態
 
@@ -99,13 +99,13 @@
 
 &emsp;&emsp;什麼是 ROCm？
 
-> ROCm（Radeon Open Compute）是 AMD 推出的開源 GPU 計算平臺，旨在為高性能計算和機器學習提供開放的軟體棧。它支持 AMD GPU 進行並行計算，是 CUDA 在 AMD 平臺上的替代方案。
+> ROCm（Radeon Open Compute）是 AMD 推出的開源 GPU 計算平台，旨在為高性能計算和機器學習提供開放的軟件棧。它支持 AMD GPU 進行並行計算，是 CUDA 在 AMD 平台上的替代方案。
 
 &emsp;&emsp;百模大戰正值火熱，開源 LLM 層出不窮。然而，目前大多數大模型教程和開發工具都基於 NVIDIA CUDA 生態。對於想要使用 AMD GPU 的開發者來說，缺乏系統性的學習資源是一個痛點。
 
-&emsp;&emsp;自 ROCm 7.10.0（2025 年 12 月 11 日） 起，AMD 通過 TheRock 項目對 ROCm 底層架構進行了重構，將計算運行時與作業系統解耦，使同一套 ROCm 上層接口可以同時運行在 Linux 與 Windows 上，並支持像 CUDA 一樣直接安裝到 Python 虛擬環境中使用。這意味著 ROCm 不再是只面向 Linux 的「工程工具」，而是升級為一個真正面向 AI 學習者與開發者的跨平臺 GPU 計算平臺——無論使用 Windows 還是 Linux，用戶都可以更低門檻地使用 AMD GPU 進行訓練和推理，大模型與 AI 玩家在硬體選擇上不再被 NVIDIA 單一生態所綁定，AMD GPU 正逐步成為一個可以被普通用戶真實使用的 AI 計算平臺。
+&emsp;&emsp;自 ROCm 7.10.0（2025 年 12 月 11 日） 起，AMD 通過 TheRock 項目對 ROCm 底層架構進行了重構，將計算運行時與操作系統解耦，使同一套 ROCm 上層接口可以同時運行在 Linux 與 Windows 上，並支持像 CUDA 一樣直接安裝到 Python 虛擬環境中使用。這意味著 ROCm 不再是只面向 Linux 的「工程工具」，而是升級為一個真正面向 AI 學習者與開發者的跨平台 GPU 計算平台——無論使用 Windows 還是 Linux，用戶都可以更低門檻地使用 AMD GPU 進行訓練和推理，大模型與 AI 玩家在硬件選擇上不再被 NVIDIA 單一生態所綁定，AMD GPU 正逐步成為一個可以被普通用戶真實使用的 AI 計算平台。
 
-&emsp;&emsp;本項目旨在基於核心貢獻者的經驗，提供 AMD ROCm 平臺上大模型部署、微調、訓練的完整教程；我們希望充分聚集共創者，一起豐富 AMD AI 生態。
+&emsp;&emsp;本項目旨在基於核心貢獻者的經驗，提供 AMD ROCm 平台上大模型部署、微調、訓練的完整教程；我們希望充分聚集共創者，一起豐富 AMD AI 生態。
 
 &emsp;&emsp;***我們希望成為 AMD GPU 與普羅大眾的橋梁，以自由、平等的開源精神，擁抱更恢弘而遼闊的 AI 世界。***
 
@@ -128,12 +128,17 @@
 
 ```
 hello-rocm/
-├── 00-Environment/         # ROCm 基礎環境安裝與配置（統一基線）
-├── 01-Deploy/              # ROCm 大模型部署實踐
-├── 02-Fine-tune/           # ROCm 大模型微調實踐
-├── 03-Infra/               # ROCm 算子優化實踐
-├── 04-References/          # ROCm 優質參考資料
-└── 05-AMD-YES/             # AMD 實踐案例集合
+├── docs/                   # VitePress 文檔源文件
+│   ├── zh/                 # 中文文檔
+│   │   ├── 00-environment/ # ROCm 基礎環境安裝與配置
+│   │   ├── 01-deploy/      # ROCm 大模型部署實踐
+│   │   ├── 02-fine-tune/   # ROCm 大模型微調實踐
+│   │   ├── 03-infra/       # ROCm 算子優化實踐
+│   │   ├── 04-references/  # ROCm 優質參考資料
+│   │   └── 05-amd-yes/     # AMD 實踐案例集合
+│   └── en/                 # English docs
+├── src/                    # 源碼與腳本
+└── assets/                 # 公共資源
 ```
 
 ### 00. Environment - ROCm 基礎環境
@@ -272,10 +277,10 @@ hello-rocm/
 ### 核心貢獻者
 
 
-- [宋志學(不要蔥薑蒜)-項目負責人](https://github.com/KMnO4-zx) （Datawhale成員，self-llm、happy-llm 項目負責人）
+- [宋志學(不要蔥薑蒜)-項目負責人](https://github.com/KMnO4-zx) （Datawhale成員，self-llm, happy-llm 項目負責人）
 - [陳榆-項目負責人](https://github.com/lucachen) （內容創作者-谷歌開發者機器學習技術專家）
-- [陳思州-項目成員](https://github.com/jjyaoao) （Datawhale 成員，hello-agents 項目負責人）
-- [潘嘉航-項目成員](https://github.com/amdjiahangpan) （內容創作者-AMD軟體工程師）
+- [陳思州-項目成員](https://github.com/jjyaoao) (Datawhale 成員, hello-agents 項目負責人)
+- [潘嘉航-項目成員](https://github.com/amdjiahangpan) （內容創作者-AMD軟件工程師）
 - [劉偉鴻-項目成員](https://github.com/Weihong-Liu) （Datawhale成員）
 - [郝東波-項目成員](https://github.com/wlkq151172) （內容創作者-江南大學研究生）
 - [柯慕靈-項目成員](https://github.com/1985312383)（Datawhale成員）
@@ -307,4 +312,3 @@ hello-rocm/
 Made with ❤️ by the hello-rocm community
 
 </div>
-
