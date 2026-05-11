@@ -21,6 +21,11 @@
 </p>
 
 </div>
+<div align="center">
+
+<a href="https://datawhalechina.github.io/hello-rocm/"><img src="https://img.shields.io/badge/hello--rocm_完全チュートリアル-オンライン体験-ed1941?logo=amd&logoColor=white&labelColor=1a1a1a" height="25"></a>
+
+</div>
 
 &emsp;&emsp;**ROCm 7.10.0**（2025年12月11日リリース）以降、ROCmはCUDAと同様にPython仮想環境にシームレスにインストールでき、**LinuxとWindowsの両方**を公式サポートしています。これはAMDにとってAI分野における大きな一歩です。学習者やLLM愛好家はもはやNVIDIAハードウェアに制限されることなく、AMD GPUが強力で実用的な選択肢となります。
 
