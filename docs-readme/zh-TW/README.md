@@ -21,7 +21,12 @@
 </p>
 
 </div>
+<div align="center">
+<br>
 
+<a href="https://datawhalechina.github.io/hello-rocm/"><img src="https://img.shields.io/badge/hello--rocm_完整教程-線上體驗-ed1941?logo=amd&logoColor=white&labelColor=1a1a1a" height="25"></a>
+
+</div>
 
 &emsp;&emsp;自 **ROCm 7.10.0** (2025年12月11日發布) 以來，ROCm 已支持像 CUDA 一樣在 Python 虛擬環境中無縫安裝，並正式支持 **Linux 和 Windows** 雙系統。這標誌著 AMD 在 AI 領域的重大突破——學習者與大模型愛好者在硬體選擇上不再局限於 NVIDIA，AMD GPU 正成為一個強有力的競爭選擇。
 

@@ -21,7 +21,12 @@
 </p>
 
 </div>
+<div align="center">
+<br>
 
+<a href="https://datawhalechina.github.io/hello-rocm/"><img src="https://img.shields.io/badge/hello--rocm_Hướng_dẫn_đầy_đủ-Trải_nghiệm-ed1941?logo=amd&logoColor=white&labelColor=1a1a1a" height="25"></a>
+
+</div>
 
 &emsp;&emsp;Kể từ **ROCm 7.10.0** (phát hành ngày 11 tháng 12 năm 2025), ROCm có thể được cài đặt liền mạch trong môi trường ảo Python giống như CUDA, với hỗ trợ chính thức cho cả **Linux và Windows**. Đây là một bước tiến lớn của AMD trong lĩnh vực AI: người học và những người đam mê LLM không còn bị giới hạn bởi phần cứng NVIDIA—GPU AMD là một lựa chọn mạnh mẽ và thiết thực.
 

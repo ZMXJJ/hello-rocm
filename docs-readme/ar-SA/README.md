@@ -21,6 +21,12 @@
 </p>
 
 </div>
+<div align="center">
+<br>
+
+<a href="https://datawhalechina.github.io/hello-rocm/"><img src="https://img.shields.io/badge/hello--rocm_الدليل_الكامل-تجربة_مباشرة-ed1941?logo=amd&logoColor=white&labelColor=1a1a1a" height="25"></a>
+
+</div>
 
 &emsp;&emsp;منذ **ROCm 7.10.0** (الذي صدر في 11 ديسمبر 2025)، يمكن تثبيت ROCm بسلاسة في البيئات الافتراضية Python تمامًا مثل CUDA، مع دعم رسمي لكل من **Linux وWindows**. هذه خطوة كبيرة من AMD في مجال الذكاء الاصطناعي: لم يعد المتعلمون وعشاق LLM مقيدين بأجهزة NVIDIA—بطاقات AMD GPU أصبحت خيارًا قويًا وعمليًا.
 
