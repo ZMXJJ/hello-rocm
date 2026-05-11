@@ -29,13 +29,13 @@
 
 &emsp;&emsp;Kể từ **ROCm 7.10.0** (phát hành ngày 11 tháng 12 năm 2025), ROCm có thể được cài đặt liền mạch trong môi trường ảo Python giống như CUDA, với hỗ trợ chính thức cho cả **Linux và Windows**. Đây là một bước tiến lớn của AMD trong lĩnh vực AI: người học và những người đam mê LLM không còn bị giới hạn bởi phần cứng NVIDIA—GPU AMD là một lựa chọn mạnh mẽ và thiết thực.
 
-&emsp;&emsp;AMD đã cam kết một chu kỳ phát hành ROCm **khoảng sáu tuần** với trọng tâm mạnh mẽ vào AI. Lộ trình phát triển thật sự thú vị.
+&emsp;&emsp;Tuy nhiên, việc hạ thấp rào cản phần cứng không tự động làm rõ lộ trình học tập. Đối với những người học đã có nền tảng LLM và muốn đưa chúng vào thực hành trên GPU AMD, những thách thức thực sự mới chỉ bắt đầu: Làm thế nào để triển khai một mô hình trên GPU AMD? Làm thế nào để tinh chỉnh và huấn luyện trên đó? Làm thế nào để hiểu hệ thống lập trình GPU của ROCm và hoàn thành việc di chuyển từ CUDA sang ROCm? Và cuối cùng, làm thế nào để tập hợp tất cả những khả năng này thành một ứng dụng AI thực sự, hoạt động được?
 
-&emsp;&emsp;Trên toàn thế giới vẫn còn thiếu các hướng dẫn có hệ thống về suy luận, triển khai, huấn luyện, tinh chỉnh và các chủ đề hạ tầng LLM trên ROCm. **hello-rocm** ra đời để lấp đầy khoảng trống đó.
+&emsp;&emsp;**hello-rocm** được sinh ra chính xác cho con đường này. Dự án này bao phủ một cách có hệ thống chuỗi sử dụng hoàn chỉnh của các mô hình lớn trên nền tảng AMD ROCm, đưa bạn từ việc chạy mô hình đầu tiên đến xây dựng các ứng dụng AI thực sự trên GPU AMD, qua mọi bước quan trọng bao gồm tinh chỉnh, huấn luyện và lập trình GPU—biến GPU AMD không chỉ là một card đồ họa, mà là điểm khởi đầu thực sự của bạn vào thế giới phát triển AI.
 
 &emsp;&emsp;**Dự án này chủ yếu là các hướng dẫn** để sinh viên và những người thực hành trong tương lai có thể học AMD ROCm một cách có cấu trúc. **Mọi người đều được chào đón mở issue hoặc gửi pull request** để cùng nhau phát triển và duy trì dự án.
 
-> &emsp;&emsp;***Lộ trình học tập: Hoàn thành [00-Môi trường](../../docs/en/00-environment/index.md) trước (ROCm + PyTorch + **uv**), sau đó đến triển khai và tinh chỉnh, và cuối cùng là các chủ đề về Infra / cấp độ toán tử. Sau khi môi trường của bạn hoạt động, LM Studio hoặc vLLM là một điểm khởi đầu tốt.***
+> &emsp;&emsp;***Lộ trình học tập: Hoàn thành [00-Môi trường](../../docs/en/00-environment/index.md) trước (ROCm + PyTorch + **uv**), sau đó đến triển khai và tinh chỉnh, và cuối cùng là tối ưu hóa toán tử và lập trình GPU. Sau khi môi trường của bạn hoạt động, LM Studio hoặc vLLM là một điểm khởi đầu tốt.***
 
 ### hello-rocm Skill: dùng dự án này trong trợ lý AI của bạn
 
@@ -45,7 +45,7 @@
 Use src/hello-rocm-skill in the current repository as the hello-rocm Skill. If your tool supports Skills, Rules, or Agent configuration, install or load it in the appropriate place, such as .claude/skills, .cursor/skills, or .agents/skills, then use that Skill to help me learn, deploy, and troubleshoot AMD ROCm.
 ```
 
-&emsp;&emsp;Xem [hello-rocm Skill guide](../../docs/en/04-references/index.md#hello-rocm-skill).
+&emsp;&emsp;Thử hỏi: GPU AMD của tôi có hỗ trợ ROCm không? Con đường nhanh nhất để chạy LLM cục bộ đầu tiên của tôi là gì? Làm thế nào để cài đặt vLLM/Ollama/llama.cpp trên ROCm? Làm thế nào để gỡ lỗi `torch.cuda.is_available()` trả về False? Xem [hướng dẫn hello-rocm Skill](../../docs/en/04-references/index.md#hello-rocm-skill).
 
 ### Cập nhật mới nhất
 
@@ -123,12 +123,17 @@ Use src/hello-rocm-skill in the current repository as the hello-rocm Skill. If y
 
 ```
 hello-rocm/
-├── 00-Environment/         # Cài đặt & cấu hình cơ bản ROCm
-├── 01-Deploy/              # Triển khai LLM trên ROCm
-├── 02-Fine-tune/           # Tinh chỉnh LLM trên ROCm
-├── 03-Infra/               # Hạ tầng / toán tử trên ROCm
-├── 04-References/          # Tài liệu tham khảo ROCm được tuyển chọn
-└── 05-AMD-YES/             # Giới thiệu dự án AMD cộng đồng
+├── docs/                   # Nguồn tài liệu VitePress
+│   ├── zh/                 # Tài liệu tiếng Trung
+│   │   ├── 00-environment/ # Cài đặt & cấu hình cơ bản ROCm
+│   │   ├── 01-deploy/      # Triển khai LLM trên ROCm
+│   │   ├── 02-fine-tune/   # Tinh chỉnh LLM trên ROCm
+│   │   ├── 03-infra/       # Tối ưu hóa toán tử & lập trình GPU
+│   │   ├── 04-references/  # Tài liệu tham khảo ROCm được tuyển chọn
+│   │   └── 05-amd-yes/     # Giới thiệu dự án AMD cộng đồng
+│   └── en/                 # Tài liệu tiếng Anh
+├── src/                    # Mã nguồn & script
+└── assets/                 # Tài nguyên chung
 ```
 
 ### 00. Môi trường — Cơ sở ROCm

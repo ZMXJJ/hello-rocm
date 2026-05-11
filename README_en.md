@@ -29,13 +29,13 @@
 
 &emsp;&emsp;Since **ROCm 7.10.0** (released December 11, 2025), ROCm can be installed seamlessly in Python virtual environments much like CUDA, with official support for both **Linux and Windows**. This is a major step for AMD in AI: learners and LLM enthusiasts are no longer limited to NVIDIA hardware—AMD GPUs are a strong, practical choice.
 
-&emsp;&emsp;AMD has committed to a **roughly six-week** ROCm release cadence with a strong focus on AI. The roadmap is exciting.
+&emsp;&emsp;However, **lowering the hardware barrier doesn't automatically clarify the learning path**. For learners who already have a foundation in large language models and want to put them into practice on AMD GPUs, the real challenges are just beginning: How do you deploy a model on an AMD GPU? How do you fine-tune and train models on top of that? How do you understand ROCm's GPU programming system and migrate from CUDA to ROCm? Ultimately, how do these capabilities come together into a deployable AI application?
 
-&emsp;&emsp;There is still a shortage of systematic tutorials worldwide for ROCm LLM inference, deployment, training, fine-tuning, and operator optimization / GPU programming topics. **hello-rocm** exists to fill that gap.
+&emsp;&emsp;**hello-rocm** exists for exactly this path. This project systematically covers the complete workflow for large language models on the AMD ROCm platform, taking you from **running your first model** to **building real AI applications on AMD GPUs**, passing through every critical step of fine-tuning, training, and GPU programming along the way. AMD GPUs aren't just graphics cards; they're your real entry point into the world of AI development.
 
 &emsp;&emsp;**This project is primarily tutorials** so students and future practitioners can learn AMD ROCm in a structured way. **Anyone is welcome to open issues or submit pull requests** to grow and maintain the project together.
 
-> &emsp;&emsp;***Learning path: Finish [00-Environment](./docs/en/00-environment/index.md) first (ROCm + PyTorch + **uv**), then deployment and fine-tuning, and finally operator optimization and GPU programming topics. After your environment works, LM Studio or vLLM is a good place to start.***
+> &emsp;&emsp;***Learning path: Finish [00-Environment](./docs/en/00-environment/index.md) first (ROCm + PyTorch + **uv**), then deployment and fine-tuning, and finally operator optimization and GPU programming. After your environment works, LM Studio or vLLM is a good place to start.***
 
 ### hello-rocm Skill: put this project inside your AI assistant
 
@@ -127,12 +127,12 @@ Use src/hello-rocm-skill in the current repository as the hello-rocm Skill. If y
 hello-rocm/
 ├── docs/                   # VitePress documentation source
 │   ├── en/                 # English docs
-│   │   ├── environment/    # ROCm baseline install & config
-│   │   ├── deploy/         # LLM deployment on ROCm
-│   │   ├── fine-tune/      # LLM fine-tuning on ROCm
-│   │   ├── infra/          # Operator optimization / GPU programming on ROCm
-│   │   ├── amd-yes/        # Community AMD project showcases
-│   │   └── references.md   # Curated ROCm references
+│   │   ├── 00-environment/    # ROCm baseline install & config
+│   │   ├── 01-deploy/         # LLM deployment on ROCm
+│   │   ├── 02-fine-tune/      # LLM fine-tuning on ROCm
+│   │   ├── 03-infra/          # Operator optimization / GPU programming on ROCm
+│   │   ├── 04-references/   # Curated ROCm references
+│   │   └── 05-amd-yes/        # Community AMD project showcases
 │   └── zh/                 # 中文文档
 ├── src/                    # Source code & scripts
 └── assets/                 # Shared assets

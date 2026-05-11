@@ -29,13 +29,13 @@
 
 &emsp;&emsp;Depuis **ROCm 7.10.0** (publiée le 11 décembre 2025), ROCm peut être installé de manière transparente dans des environnements virtuels Python, un peu comme CUDA, avec un support officiel pour **Linux et Windows**. C'est un grand pas en avant pour AMD dans le domaine de l'IA : les apprenants et les passionnés de LLM ne sont plus limités au matériel NVIDIA — les GPU AMD sont un choix solide et pratique.
 
-&emsp;&emsp;AMD s'est engagé à un rythme de publication ROCm d'environ **six semaines**, avec un fort accent sur l'IA. La feuille de route est prometteuse.
+&emsp;&emsp;Cependant, **abaisser la barrière matérielle ne clarifie pas automatiquement le parcours d'apprentissage**. Pour les apprenants qui ont déjà des bases en LLM et souhaitent les mettre en pratique sur des GPU AMD, les vrais défis ne font que commencer : Comment déployer un modèle sur GPU AMD ? Comment effectuer du fine-tuning et de l'entraînement sur cette base ? Comment comprendre le système de programmation GPU de ROCm et réaliser la migration de CUDA vers ROCm ? Et finalement, comment rassembler toutes ces capacités dans une application IA réelle et fonctionnelle ?
 
-&emsp;&emsp;Il existe encore une pénurie mondiale de tutoriels systématiques pour l'inférence, le déploiement, l'entraînement, le fine-tuning et les sujets d'infrastructure des LLM sous ROCm. **hello-rocm** a été créé pour combler cette lacune.
+&emsp;&emsp;**hello-rocm** est né précisément pour ce parcours. Ce projet couvre systématiquement la chaîne d'utilisation complète des grands modèles sur la plateforme AMD ROCm, vous emmenant depuis **l'exécution de votre premier modèle** jusqu'à **la construction d'applications IA réelles sur GPU AMD**, en passant par chaque étape clé incluant le fine-tuning, l'entraînement et la programmation GPU, faisant du GPU AMD non pas seulement une carte graphique, mais votre véritable point de départ dans le monde du développement IA.
 
 &emsp;&emsp;**Ce projet est principalement un ensemble de tutoriels** afin que les étudiants et les futurs praticiens puissent apprendre AMD ROCm de manière structurée. **Toute personne est la bienvenue pour ouvrir des issues ou soumettre des pull requests** afin de développer et maintenir le projet ensemble.
 
-> &emsp;&emsp;***Parcours d'apprentissage : Commencez par [00-Environnement](../../docs/en/00-environment/index.md) (ROCm + PyTorch + **uv**), puis le déploiement et le fine-tuning, et enfin les sujets d'infrastructure / niveau opérateur. Une fois votre environnement opérationnel, LM Studio ou vLLM est un bon point de départ.***
+> &emsp;&emsp;***Parcours d'apprentissage : Commencez par [00-Environnement](../../docs/en/00-environment/index.md) (ROCm + PyTorch + **uv**), puis le déploiement et le fine-tuning, et enfin l'optimisation d'opérateurs et la programmation GPU. Une fois votre environnement opérationnel, LM Studio ou vLLM est un bon point de départ.***
 
 ### hello-rocm Skill : utiliser ce projet dans votre assistant IA
 
@@ -45,7 +45,7 @@
 Use src/hello-rocm-skill in the current repository as the hello-rocm Skill. If your tool supports Skills, Rules, or Agent configuration, install or load it in the appropriate place, such as .claude/skills, .cursor/skills, or .agents/skills, then use that Skill to help me learn, deploy, and troubleshoot AMD ROCm.
 ```
 
-&emsp;&emsp;Voir le [guide hello-rocm Skill](../../docs/en/04-references/index.md#hello-rocm-skill).
+&emsp;&emsp;Essayez de demander : Mon GPU AMD supporte-t-il ROCm ? Quel est le chemin le plus rapide pour exécuter mon premier LLM local ? Comment installer vLLM/Ollama/llama.cpp sur ROCm ? Comment déboguer quand torch.cuda.is_available() renvoie False ? Voir le [guide hello-rocm Skill](../../docs/en/04-references/index.md#hello-rocm-skill).
 
 ### Dernières mises à jour
 
@@ -123,12 +123,17 @@ Use src/hello-rocm-skill in the current repository as the hello-rocm Skill. If y
 
 ```
 hello-rocm/
-├── 00-Environment/         # Installation et configuration de base ROCm
-├── 01-Deploy/              # Déploiement de LLM sur ROCm
-├── 02-Fine-tune/           # Fine-tuning de LLM sur ROCm
-├── 03-Infra/               # Infra / opérateurs sur ROCm
-├── 04-References/          # Références ROCm sélectionnées
-└── 05-AMD-YES/             # Projets communautaires AMD
+├── docs/                   # Source de documentation VitePress
+│   ├── zh/                 # Documentation en chinois
+│   │   ├── 00-environment/ # Installation et configuration de base ROCm
+│   │   ├── 01-deploy/      # Déploiement de LLM sur ROCm
+│   │   ├── 02-fine-tune/   # Fine-tuning de LLM sur ROCm
+│   │   ├── 03-infra/       # Optimisation d'opérateurs et programmation GPU
+│   │   ├── 04-references/  # Références ROCm sélectionnées
+│   │   └── 05-amd-yes/     # Projets communautaires AMD
+│   └── en/                 # Documentation en anglais
+├── src/                    # Code source et scripts
+└── assets/                 # Ressources partagées
 ```
 
 ### 00. Environnement — Base ROCm
