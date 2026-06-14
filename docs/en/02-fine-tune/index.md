@@ -1,6 +1,15 @@
-# 02-Fine-tune
+<div align=center>
+  <h1>02-Fine-tune</h1>
+  <strong>🔧 ROCm LLM Fine-Tuning in Practice</strong>
+</div>
 
-[中文](/zh/02-fine-tune/) | [Back to Home](/)
+<div align="center">
+
+*From dataset construction to LoRA fine-tuning and weight merging*
+
+[Back to Home](/) · [中文](/zh/02-fine-tune/)
+
+</div>
 
 This chapter collects and organizes materials, general tutorials, and model-specific experiment notes for LLM fine-tuning on AMD GPU / ROCm environments. It helps learners understand and practice the full fine-tuning workflow — from environment setup and dataset construction to LoRA fine-tuning and weight merging.
 
