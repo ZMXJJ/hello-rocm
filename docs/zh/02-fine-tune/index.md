@@ -1,6 +1,15 @@
-#02-Fine-tune
+<div align=center>
+  <h1>02-Fine-tune</h1>
+  <strong>🔧 ROCm 大模型微调实践</strong>
+</div>
 
-[English](/02-fine-tune/) | [返回主页](/zh/)
+<div align="center">
+
+*从数据集构造到 LoRA 微调与权重合并*
+
+[返回主页](/zh/) · [English](/02-fine-tune/)
+
+</div>
 
 本章节收录整理在 AMD GPU / ROCm 环境下进行大模型微调的资料、通用教程与模型实战记录，帮助学习者从环境配置、数据集构造、LoRA 微调到权重合并，完整理解和实践大模型微调流程。
 
@@ -397,5 +406,4 @@ with torch.no_grad():
     outputs = outputs[:, inputs['input_ids'].shape[1]:]
     print(tokenizer.decode(outputs[0], skip_special_tokens=True))
 ```
-
 
