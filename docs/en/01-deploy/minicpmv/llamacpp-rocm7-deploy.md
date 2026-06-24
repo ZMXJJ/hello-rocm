@@ -1,15 +1,18 @@
 ## llama.cpp Deployment of MiniCPM-V (Ubuntu 24.04 + ROCm 7+)
 
-This section explains how to deploy the **multimodal** model **MiniCPM-V 4.6** for
-local image + text inference with **llama.cpp** on an AMD GPU (Ubuntu 24.04 + ROCm 7+).
+### Model Overview
 
-It follows the same prebuilt-binary flow as the `qwen3/llamacpp-rocm7-deploy.md` example,
-with one key difference: **MiniCPM-V is a vision-language model**, so in addition to the GGUF
-weights you must also load an **`mmproj` multimodal projector** file, and you use
-`llama-mtmd-cli` / `llama-server` with `--mmproj`.
+[MiniCPM-V](https://github.com/OpenBMB/MiniCPM-V) is an on-device multimodal model series developed by ModelBest and Tsinghua University NLP Lab (OpenBMB). MiniCPM-V 4.6 has only 1.3B parameters (SigLIP2 vision encoder + Qwen3.5 language backbone) and supports image understanding and text conversation.
 
-The example model is **MiniCPM-V 4.6 Q4_K_M (GGUF)** — a 1.3B vision-language model, very
-friendly for single-GPU / edge deployment.
+- Model: [openbmb/MiniCPM-V-4_6](https://huggingface.co/openbmb/MiniCPM-V-4_6)
+- GGUF: [openbmb/MiniCPM-V-4_6-gguf](https://huggingface.co/openbmb/MiniCPM-V-4_6-gguf)
+
+This guide deploys **MiniCPM-V 4.6 Q4_K_M (GGUF)** using **llama.cpp**, covering:
+
+- Prebuilt executables (recommended)
+- Docker + official ROCm image for building from source
+
+Unlike the text-only MiniCPM, MiniCPM-V is a vision-language model that requires both a GGUF weights file and an **`mmproj` multimodal projector** file. Use `llama-mtmd-cli` / `llama-server --mmproj` for inference.
 
 > Prerequisite: ROCm 7+ system installation and verification is complete
 > (see `env-prepare-ubuntu24-rocm7.md`). Verified on **AMD Ryzen AI MAX+ 395 (Radeon 8060S,
@@ -55,7 +58,7 @@ TARGET_GRAPHICS_VERSION: gfx1151
 ROCm version: 7.13.0
 ```
 
-Confirm llama.cpp sees the GPU through ROCm:
+Confirm llama.cpp can see the GPU:
 
 ```bash
 cd ~/minicpmv-rocm/llama-bin
@@ -67,7 +70,7 @@ export LD_LIBRARY_PATH=$PWD:/opt/rocm/lib:$LD_LIBRARY_PATH
 
 ---
 
-#### 3. Enter the llama Backend Directory and Set Permissions / Environment Variables
+#### 3. Set Permissions and Environment Variables
 
 ```bash
 cd ~/minicpmv-rocm/llama-bin
@@ -75,19 +78,18 @@ chmod +x llama-cli llama-server llama-mtmd-cli
 export LD_LIBRARY_PATH=$PWD:/opt/rocm/lib:$LD_LIBRARY_PATH
 ```
 
-> Note: the Lemonade build bundles its own ROCm runtime libraries next to the binaries, so put
-> the backend directory itself on `LD_LIBRARY_PATH` (the `$PWD` above) in addition to `/opt/rocm/lib`.
+> The Lemonade build bundles its own ROCm runtime libraries next to the binaries, so add `$PWD` to `LD_LIBRARY_PATH` in addition to `/opt/rocm/lib`.
 
 ---
 
 #### 4. Download MiniCPM-V 4.6 GGUF + mmproj Projector
 
-llama.cpp uses the **GGUF model format**. For a multimodal model you need **two** files:
+Multimodal models require **two** files:
 
-- the quantized LLM weights (`*Q4_K_M*.gguf`)
-- the vision projector (`mmproj-*.gguf`)
+- Quantized LLM weights (`*Q4_K_M*.gguf`)
+- Vision projector (`mmproj-*.gguf`)
 
-Using the Chinese Hugging Face mirror `https://hf-mirror.com/`:
+Using the Chinese Hugging Face mirror:
 
 ```bash
 mkdir -p ~/models/MiniCPM-V-4_6-gguf && cd ~/models/MiniCPM-V-4_6-gguf
@@ -100,16 +102,13 @@ for f in MiniCPM-V-4_6-Q4_K_M.gguf mmproj-model-f16.gguf; do
 done
 ```
 
-> Tip: you can also use `hfd.sh` + `aria2` (as in the Qwen3 example) for faster, resumable
-> multi-connection downloads. GGUF repo / file names may change with upstream updates — search
-> `MiniCPM-V-4_6-gguf` on Hugging Face for the latest trusted repository.
+> You can also use `hfd.sh` + `aria2` for resumable downloads. File names may change with upstream updates — search `MiniCPM-V-4_6-gguf` on Hugging Face for the latest version.
 
 ---
 
 #### 5. CLI Multimodal Test (`llama-mtmd-cli`)
 
-This is the quickest way to confirm the vision pipeline works. `llama-mtmd-cli` is the
-multimodal CLI; pass the projector with `--mmproj` and an image with `--image`:
+`llama-mtmd-cli` is the multimodal CLI. Pass the projector with `--mmproj` and an image with `--image`:
 
 ```bash
 cd ~/minicpmv-rocm/llama-bin
@@ -122,8 +121,6 @@ export LD_LIBRARY_PATH=$PWD:/opt/rocm/lib:$LD_LIBRARY_PATH
   --image /path/to/image.jpeg \
   -p "Describe this image in detail."
 ```
-
-Expected: a coherent natural-language description of the image, generated on `ROCm0`.
 
 ---
 
@@ -141,10 +138,9 @@ cd ~/minicpmv-rocm/llama-bin
 
 ---
 
-#### 7. Test the API (text + image, with tokens/s)
+#### 7. Test the API
 
-**Text completion** (same formula as the Qwen3 example,
-`completion_tokens / (timings.predicted_ms / 1000)`):
+**Text completion:**
 
 ```bash
 curl -s -X POST http://127.0.0.1:8080/v1/completions \
@@ -160,7 +156,7 @@ curl -s -X POST http://127.0.0.1:8080/v1/completions \
 '
 ```
 
-**Multimodal chat** (image via base64 data URL on the OpenAI `chat/completions` endpoint):
+**Multimodal chat** (image via base64):
 
 ```bash
 IMG_B64=$(base64 -w0 /path/to/image.jpeg)
@@ -176,21 +172,77 @@ curl -s -X POST http://127.0.0.1:8080/v1/chat/completions \
 }' | jq -r '.choices[0].message.content'
 ```
 
-Reference results on **Radeon 8060S (gfx1151), ROCm 7.13, ctx=4096**:
-
-- Text decode: **~190 tokens/s** (MiniCPM-V 4.6 is only 1.3B, so much faster than an 8B model)
-- Multimodal chat: **~190 tokens/s** decode (plus image-encode time on the first turn)
-- **tokens/s depends on your actual hardware.**
+Reference: **~190 tokens/s** decode for both text and multimodal on Radeon 8060S (gfx1151), ROCm 7.13, ctx=4096 (first multimodal turn includes image encoding time). Actual speed depends on hardware.
 
 ---
 
-### Method 2: Docker Method (Official ROCm llama.cpp Image)
+### Method 2: Docker (Official ROCm llama.cpp Image)
 
-If you prefer Docker, follow the official documentation and build from source inside the
-container, exactly as in the Qwen3 / Gemma4 examples — the only MiniCPM-V-specific change is
-to launch with both `-m <gguf>` and `--mmproj <mmproj-gguf>`:
+> Docker requires `amdgpu-dkms`:
+> https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/docker.html
 
-- https://rocm.docs.amd.com/projects/install-on-linux/en/latest/install/3rd-party/llama-cpp-install.html
+#### 1. Start the Container
+
+```bash
+export MODEL_PATH='~/models'
+
+sudo docker run -it \
+  --name=$(whoami)_llamacpp_minicpmv \
+  --privileged --network=host \
+  --device=/dev/kfd --device=/dev/dri \
+  --group-add video --cap-add=SYS_PTRACE \
+  --security-opt seccomp=unconfined \
+  --ipc=host --shm-size 16G \
+  -v $MODEL_PATH:/data \
+  rocm/dev-ubuntu-24.04:7.0-complete
+```
+
+---
+
+#### 2. Prepare the Workspace
+
+```bash
+apt-get update && apt-get install -y nano libcurl4-openssl-dev cmake git
+mkdir -p /workspace && cd /workspace
+```
+
+---
+
+#### 3. Clone llama.cpp
+
+```bash
+git clone https://github.com/ROCm/llama.cpp
+cd llama.cpp
+```
+
+---
+
+#### 4. Set ROCm Architecture
+
+```bash
+# AI MAX 395 (gfx1151) example
+export LLAMACPP_ROCM_ARCH=gfx1151
+```
+
+---
+
+#### 5. Build llama.cpp
+
+```bash
+HIPCXX="$(hipconfig -l)/clang" HIP_PATH="$(hipconfig -R)" \
+cmake -S . -B build \
+  -DGGML_HIP=ON \
+  -DAMDGPU_TARGETS=$LLAMACPP_ROCM_ARCH \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DLLAMA_CURL=ON && \
+cmake --build build --config Release -j$(nproc)
+```
+
+---
+
+#### 6. Run the Multimodal Test
+
+MiniCPM-V requires both the model weights and the mmproj projector:
 
 ```bash
 ./build/bin/llama-mtmd-cli \
@@ -201,11 +253,10 @@ to launch with both `-m <gguf>` and `--mmproj <mmproj-gguf>`:
   -p "What is in this image?"
 ```
 
-> Note: building llama.cpp from source for ROCm (`-DGGML_HIP=ON -DAMDGPU_TARGETS=gfx1151`) is
-> covered step-by-step in `qwen3/llamacpp-rocm7-deploy.md`; multimodal support and the
-> `mmproj` file are the only additions needed for MiniCPM-V.
+---
 
-### After build
-Screenshot example:
-<img width="1628" height="1598" alt="CPM-V example" src="https://github.com/user-attachments/assets/32b98584-06de-4aed-b62c-9428005c042c" />
+### Screenshot Example
 
+<div align='center'>
+    <img src="../../../public/images/01-deploy/minicpmv/minicpmv-example.png" alt="MiniCPM-V 4.6 llama.cpp multimodal example" width="90%">
+</div>

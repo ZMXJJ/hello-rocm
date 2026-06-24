@@ -1,18 +1,15 @@
 ## vLLM Deployment of MiniCPM-V (Ubuntu 24.04 + ROCm 7+)
 
-This section explains how to serve the **multimodal** model **MiniCPM-V 4.6** with **vLLM** on
-an AMD GPU (Ubuntu 24.04 + ROCm 7+), including:
+### Model Overview
 
-- Quick start using the official ROCm vLLM Docker image
+[MiniCPM-V](https://github.com/OpenBMB/MiniCPM-V) is an on-device multimodal model series developed by ModelBest and Tsinghua University NLP Lab (OpenBMB). MiniCPM-V 4.6 has only 1.3B parameters (SigLIP2 vision encoder + Qwen3.5 language backbone) and supports image understanding and text conversation.
+
+- Model: [openbmb/MiniCPM-V-4_6](https://huggingface.co/openbmb/MiniCPM-V-4_6)
+
+This guide deploys **MiniCPM-V 4.6** using **vLLM**, covering:
+
+- Quick start with the official ROCm vLLM Docker image
 - Manually building ROCm vLLM from source (for environments without Docker)
-
-It follows the same structure as the `qwen3/vllm-rocm7-deploy.md` example. The MiniCPM-V
-specifics are: it is a **vision-language model**, so you serve it with `--trust-remote-code`
-and (for multi-image / video) `--limit-mm-per-prompt`, and you send images through the OpenAI
-`chat/completions` API.
-
-The example model is **MiniCPM-V 4.6** (1.3B vision-language; pairs a SigLIP2 vision encoder
-with a Qwen3.5 backbone).
 
 > Prerequisite: ROCm 7+ installation and verification is complete
 > (see `env-prepare-ubuntu24-rocm7.md`). Reference machine: **AMD Ryzen AI MAX+ 395
@@ -20,36 +17,28 @@ with a Qwen3.5 backbone).
 
 ---
 
-### Model / Version Compatibility (read first)
+### Version Requirements
 
-MiniCPM-V 4.6 is **natively supported** in vLLM as the architecture
-**`MiniCPMV4_6ForConditionalGeneration`**. Two hard requirements:
+MiniCPM-V 4.6 is natively supported in vLLM as the architecture `MiniCPMV4_6ForConditionalGeneration`. Requirements:
 
-- **vLLM ≥ 0.22.0** — earlier releases do not contain the `minicpmv4_6` model module.
-- **transformers ≥ 5.7** — the 4.6 architecture was merged into transformers as a standalone
-  class (this repo's environment uses transformers 5.12.1).
+- **vLLM >= 0.22.0**
+- **transformers >= 5.7**
 
-> Important version note for ROCm source builds: vLLM 0.22.0+ pins **`torch == 2.11.0`** in its
-> build metadata. If your ROCm PyTorch is older (e.g. `torch 2.9.x+rocm`), build vLLM in a
-> **separate virtual environment** with a matching torch (a ROCm `torch 2.10/2.11` wheel), so you
-> don't disturb a working inference/fine-tune environment. The Docker method (below) avoids this
-> entirely by shipping a matched torch + vLLM inside the image.
+> vLLM 0.22.0+ requires `torch == 2.11.0`. If your ROCm PyTorch is older (e.g. `torch 2.9.x+rocm`), build vLLM in a **separate virtual environment** to avoid breaking your existing setup. The Docker method avoids this entirely.
 
 ---
 
-## Method 1: Docker Method (Recommended)
+## Method 1: Docker (Recommended)
 
-Refer to the official Quickstart documentation:
+Reference: https://docs.vllm.ai/en/latest/getting_started/quickstart/#installation
 
-- https://docs.vllm.ai/en/latest/getting_started/quickstart/#installation
-
-> Note: If using Docker, you need `amdgpu-dkms`:
+> Docker requires `amdgpu-dkms`:
 > https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/docker.html
 
 ### 1. Start the vLLM Container
 
 ```bash
-sudo docker pull rocm/vllm-dev:nightly # Get the latest image
+sudo docker pull rocm/vllm-dev:nightly
 
 sudo docker run -it --rm \
   --network=host \
@@ -67,61 +56,45 @@ sudo docker run -it --rm \
 
 The container's `/app/models` is mounted to the host's `~/models`.
 
-> Tip: confirm the image's vLLM is new enough: `python -c "import vllm; print(vllm.__version__)"`
-> inside the container should report ≥ 0.22.0. If not, pull a newer tag.
+> Verify version inside the container: `python -c "import vllm; print(vllm.__version__)"` should report >= 0.22.0.
 
-### 2. Download the Model (HF format, NOT the GGUF)
+### 2. Download the Model (HF format, NOT GGUF)
 
-vLLM serves the full Hugging Face checkpoint (safetensors), not the llama.cpp GGUF:
+vLLM needs the full Hugging Face checkpoint (safetensors), not the llama.cpp GGUF:
 
 ```bash
-# On the host (or inside the container), into ~/models
 export HF_ENDPOINT=https://hf-mirror.com
 huggingface-cli download openbmb/MiniCPM-V-4_6 \
   --local-dir ~/models/MiniCPM-V-4_6
 ```
 
-### 3. Start the Model Service Inside the Container
-
-Launch command from the official MiniCPM-V cookbook, adapted:
+### 3. Start the Model Service
 
 ```bash
-# Run inside the container
 vllm serve /app/models/MiniCPM-V-4_6 \
   --trust-remote-code \
   --dtype bfloat16 \
   --max-model-len 8192 \
   --gpu-memory-utilization 0.9 \
   --max-num-seqs 8
-
-# Quick start (--enforce-eager): disables HIP graph capture,
-# faster startup but slightly slower inference. Useful for first bring-up.
-vllm serve /app/models/MiniCPM-V-4_6 \
-  --trust-remote-code \
-  --dtype bfloat16 \
-  --enforce-eager \
-  --max-model-len 8192 \
-  --max-num-seqs 8
 ```
 
-> - Use `--dtype bfloat16` on gfx1151 (fp16 can overflow to NaN on this model family; bf16 is
->   stable on Strix Halo).
-> - 4.6 supports up to 256K context; start small (`--max-model-len 8192`) and raise it as VRAM allows.
-> - For multi-image / video per request, add e.g. `--limit-mm-per-prompt '{"image": 4, "video": 1}'`.
-> - The `MiniCPM-V-4_6-Thinking` checkpoint injects a `<think>` block by default; serve the plain
->   `MiniCPM-V-4_6` checkpoint for direct answers, or pass
->   `--chat-template-kwargs '{"enable_thinking": false}'`.
+For quick bring-up, add `--enforce-eager` to skip HIP graph capture (faster startup, slightly slower inference).
 
-### 4. Test the API (text + image, with tokens/s)
+> - Use `--dtype bfloat16` on gfx1151 (fp16 may produce NaN).
+> - For multi-image / video per request, add `--limit-mm-per-prompt '{"image": 4, "video": 1}'`.
+> - For reasoning mode, use the `MiniCPM-V-4_6-Thinking` checkpoint; otherwise use `MiniCPM-V-4_6`.
 
-Auto-detect the model id, then call the OpenAI-compatible endpoints (vLLM serves on port 8000):
+### 4. Test the API
+
+Get the model id:
 
 ```bash
 MODEL_ID=$(curl -s http://127.0.0.1:8000/v1/models | jq -r '.data[0].id')
-echo "Detected model ID: $MODEL_ID"
+echo "Model ID: $MODEL_ID"
 ```
 
-**Text completion + tokens/s** (wall-clock method, same as the Qwen3 example):
+**Text completion:**
 
 ```bash
 start=$(date +%s.%N)
@@ -136,7 +109,7 @@ echo "$response" | jq -r '.choices[0].text'
 echo "tokens: $tokens | time: ${duration}s | tokens/s: $(echo "scale=2; $tokens / $duration" | bc)"
 ```
 
-**Multimodal chat** (image via base64 data URL on `chat/completions`):
+**Multimodal chat** (image via base64):
 
 ```bash
 IMG_B64=$(base64 -w0 /app/models/image.jpeg)
@@ -154,57 +127,66 @@ curl -s -X POST http://127.0.0.1:8000/v1/chat/completions \
 
 ---
 
-## Method 2: Manual Build of vLLM (No Docker / Advanced Users)
+## Method 2: Build vLLM from Source (No Docker)
 
-Use this when Docker is unavailable. It mirrors the Qwen3 source-build flow; the steps that
-differ for MiniCPM-V are called out.
+### 1. Requirements
 
-### 1. Environment and Version Requirements
+- vLLM **>= 0.22.0**
+- ROCm **7.0.2+**, GPU support for gfx1151/1150
+- `torch == 2.11.0` (ROCm version), in an isolated venv
 
-- vLLM **≥ 0.22.0** (required for MiniCPM-V 4.6); this guide uses a release tag, e.g. `v0.22.0`.
-- GPU support includes Ryzen AI MAX / AI 300 (**gfx1151**/1150); ROCm **7.0.2+**.
-- A ROCm PyTorch matching vLLM's pin (`torch == 2.11.0`). Build in a dedicated venv.
-
-### 2. Set Up an Isolated Python venv with uv
-
-Building in a separate venv protects any existing ROCm torch (e.g. a llama.cpp / fine-tune env):
+### 2. Create an Isolated Python venv
 
 ```bash
 uv venv --python 3.12 --seed ~/vllm-venv
 source ~/vllm-venv/bin/activate
 ```
 
-### 3. Install ROCm PyTorch Matching vLLM's Pin
+### 3. Install ROCm PyTorch
 
 ```bash
-# A ROCm torch wheel matching vLLM's build pin (2.11 nightly shown; use the closest available)
 uv pip install --no-cache-dir \
   --index-url https://download.pytorch.org/whl/nightly/rocm7.0 \
   "torch==2.11.0.dev*" torchvision
 ```
 
-> If a `torch 2.11` ROCm wheel is unavailable for your ROCm, use the nearest (e.g. `2.10+rocm7.0`)
-> and build with `--no-build-isolation` so vLLM compiles against the installed torch.
+> If no `torch 2.11` wheel is available, use the closest version and build with `--no-build-isolation`.
 
-### 4. Triton for ROCm
+### 4. Install Triton
 
-ROCm PyTorch wheels already ship a matching Triton (`import triton` to confirm). Only build
-Triton from source if `import triton` fails — see the Qwen3 guide's Triton section.
-
-### 5. (Optional) FlashAttention for ROCm
-
-vLLM runs on gfx1151 without a custom FlashAttention build; vLLM will fall back to a supported
-attention backend. To build it anyway, follow the Qwen3 guide's FlashAttention section.
-
-### 6. Build vLLM (ROCm, gfx1151)
+ROCm PyTorch wheels usually include Triton. Verify:
 
 ```bash
-# AMD SMI (from the local ROCm install)
+python -c "import triton; print(triton.__version__)"
+```
+
+If `import triton` fails, build from source:
+
+```bash
+git clone https://github.com/triton-lang/triton.git
+cd triton
+pip install -e python
+```
+
+### 5. (Optional) FlashAttention
+
+vLLM runs on gfx1151 without a custom FlashAttention build. If needed:
+
+```bash
+git clone https://github.com/ROCm/flash-attention.git
+cd flash-attention
+pip install -e .
+```
+
+### 6. Build vLLM
+
+```bash
+# AMD SMI
 cp -r /opt/rocm/share/amd_smi ./amdsmi_src && (cd ./amdsmi_src && uv pip install .)
 
 git clone https://github.com/vllm-project/vllm.git
 cd vllm
-git checkout v0.22.0          # any tag >= 0.22.0 that contains minicpmv4_6.py
+git checkout v0.22.0
 
 uv pip install -r requirements/rocm.txt
 uv pip install numba scipy "huggingface-hub[cli,hf_transfer]" setuptools_scm setuptools wheel ninja cmake
@@ -216,11 +198,11 @@ export ROCM_HOME="/opt/rocm"
 MAX_JOBS=16 uv pip install -e . --no-build-isolation
 ```
 
-> This compiles vLLM's HIP kernels for gfx1151 (a few hundred source files); expect a long build.
-> Verify the architecture is registered afterwards:
-> ```bash
-> python -c "from vllm import ModelRegistry; print('MiniCPMV4_6ForConditionalGeneration' in ModelRegistry.get_supported_archs())"
-> ```
+This compiles HIP kernels for gfx1151 and takes a while. Verify afterwards:
+
+```bash
+python -c "from vllm import ModelRegistry; print('MiniCPMV4_6ForConditionalGeneration' in ModelRegistry.get_supported_archs())"
+```
 
 ### 7. Serve and Test
 
@@ -233,17 +215,11 @@ vllm serve ~/models/MiniCPM-V-4_6 \
   --max-num-seqs 8
 ```
 
-Then use the same text + multimodal API tests as Method 1 (Section 4).
+Then use the same API tests as Method 1 (Section 4).
 
 ---
 
-### Notes / Status
+### Notes
 
-- **Model-side compatibility is confirmed**: vLLM exposes `MiniCPMV4_6ForConditionalGeneration`
-  (vLLM ≥ 0.22.0, transformers ≥ 5.7), and gfx1151 is a supported vLLM target on ROCm 7.0.2+.
-- **The build is the heavy part on consumer ROCm**: without Docker, vLLM must be compiled from
-  source for gfx1151, and the only versions with 4.6 support pin `torch 2.11`. Use an isolated venv
-  so you don't disturb a working `torch 2.9.x+rocm` environment (such as the llama.cpp / fine-tune
-  setup in this repo).
-- For llama.cpp deployment of the same model (lighter weight, prebuilt binaries), see
-  `minicpmv/llamacpp-rocm7-deploy.md`.
+- Without Docker, vLLM must be compiled from source for gfx1151, and versions with 4.6 support require `torch 2.11`. Use an isolated venv.
+- For llama.cpp deployment of the same model (lighter weight, prebuilt binaries), see `minicpmv/llamacpp-rocm7-deploy.md`.

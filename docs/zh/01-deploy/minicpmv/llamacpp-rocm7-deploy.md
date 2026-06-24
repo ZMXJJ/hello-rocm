@@ -1,13 +1,18 @@
 ## llama.cpp 部署 MiniCPM-V（Ubuntu 24.04 + ROCm 7+）
 
-本节介绍如何在 AMD GPU（Ubuntu 24.04 + ROCm 7+）上，使用 **llama.cpp** 对**多模态**模型
-**MiniCPM-V 4.6** 进行本地「图像 + 文本」推理。
+### 模型简介
 
-整体流程与 `qwen3/llamacpp-rocm7-deploy.md` 的预构建方式一致，但有一个关键区别：
-**MiniCPM-V 是视觉语言模型**，除 GGUF 权重外，还需加载一个 **`mmproj` 多模态投影文件**，
-并使用带 `--mmproj` 的 `llama-mtmd-cli` / `llama-server`。
+[MiniCPM-V](https://github.com/OpenBMB/MiniCPM-V) 是由面壁智能（ModelBest）与清华大学自然语言处理实验室（OpenBMB）联合开发的端侧多模态大模型系列。MiniCPM-V 4.6 是该系列最新版本，仅 1.3B 参数（SigLIP2 视觉编码器 + Qwen3.5 语言主干），支持图像理解和文本对话。
 
-示例模型为 **MiniCPM-V 4.6 Q4_K_M（GGUF）** —— 一个 1.3B 的视觉语言模型，非常适合单卡 / 端侧部署。
+- 模型仓库：[openbmb/MiniCPM-V-4_6](https://huggingface.co/openbmb/MiniCPM-V-4_6)
+- GGUF 量化：[openbmb/MiniCPM-V-4_6-gguf](https://huggingface.co/openbmb/MiniCPM-V-4_6-gguf)
+
+本节使用 **llama.cpp** 部署 **MiniCPM-V 4.6 Q4_K_M（GGUF）**，包括：
+
+- 使用预构建的可执行文件（推荐）
+- 使用 Docker + 官方 ROCm 镜像自行编译
+
+与纯文本的 MiniCPM 不同，MiniCPM-V 是视觉语言模型，除 GGUF 权重外还需加载 **`mmproj` 多模态投影文件**，并使用 `llama-mtmd-cli` / `llama-server --mmproj` 进行推理。
 
 > 前置条件：已完成 ROCm 7+ 系统安装与验证（见 `env-prepare-ubuntu24-rocm7.md`）。
 > 已在 **AMD Ryzen AI MAX+ 395（Radeon 8060S，gfx1151），ROCm 7.13** 上验证。
@@ -52,7 +57,7 @@ TARGET_GRAPHICS_VERSION: gfx1151
 ROCm version: 7.13.0
 ```
 
-确认 llama.cpp 通过 ROCm 识别到 GPU：
+确认 llama.cpp 能识别到 GPU：
 
 ```bash
 cd ~/minicpmv-rocm/llama-bin
@@ -64,7 +69,7 @@ export LD_LIBRARY_PATH=$PWD:/opt/rocm/lib:$LD_LIBRARY_PATH
 
 ---
 
-#### 3. 进入 llama 后端目录并设置权限 / 环境变量
+#### 3. 设置权限和环境变量
 
 ```bash
 cd ~/minicpmv-rocm/llama-bin
@@ -72,19 +77,18 @@ chmod +x llama-cli llama-server llama-mtmd-cli
 export LD_LIBRARY_PATH=$PWD:/opt/rocm/lib:$LD_LIBRARY_PATH
 ```
 
-> 注意：Lemonade 构建会把自带的 ROCm 运行库放在可执行文件旁边，因此除 `/opt/rocm/lib` 外，
-> 还需把后端目录本身（上面的 `$PWD`）加入 `LD_LIBRARY_PATH`。
+> Lemonade 构建会把自带的 ROCm 运行库放在可执行文件旁边，因此除 `/opt/rocm/lib` 外，还需把 `$PWD` 加入 `LD_LIBRARY_PATH`。
 
 ---
 
 #### 4. 下载 MiniCPM-V 4.6 GGUF + mmproj 投影文件
 
-llama.cpp 使用 **GGUF 模型格式**。多模态模型需要**两个**文件：
+多模态模型需要**两个**文件：
 
 - 量化后的 LLM 权重（`*Q4_K_M*.gguf`）
 - 视觉投影文件（`mmproj-*.gguf`）
 
-使用国内 Hugging Face 镜像 `https://hf-mirror.com/`：
+使用国内 Hugging Face 镜像下载：
 
 ```bash
 mkdir -p ~/models/MiniCPM-V-4_6-gguf && cd ~/models/MiniCPM-V-4_6-gguf
@@ -97,16 +101,13 @@ for f in MiniCPM-V-4_6-Q4_K_M.gguf mmproj-model-f16.gguf; do
 done
 ```
 
-> 提示：也可使用 `hfd.sh` + `aria2`（同 Qwen3 示例）进行更快、可断点续传的多线程下载。
-> GGUF 仓库 / 文件名可能随上游更新而变化，使用前请在 Hugging Face 搜索 `MiniCPM-V-4_6-gguf`
-> 选择最新的可信仓库。
+> 也可使用 `hfd.sh` + `aria2` 进行断点续传下载。GGUF 文件名可能随上游更新而变化，请在 Hugging Face 搜索确认最新版本。
 
 ---
 
 #### 5. CLI 多模态测试（`llama-mtmd-cli`）
 
-这是验证视觉链路最快的方式。`llama-mtmd-cli` 是多模态 CLI；用 `--mmproj` 传入投影文件，
-用 `--image` 传入图片：
+`llama-mtmd-cli` 是多模态 CLI，用 `--mmproj` 传入投影文件，用 `--image` 传入图片：
 
 ```bash
 cd ~/minicpmv-rocm/llama-bin
@@ -119,8 +120,6 @@ export LD_LIBRARY_PATH=$PWD:/opt/rocm/lib:$LD_LIBRARY_PATH
   --image /path/to/image.jpeg \
   -p "请详细描述这张图片。"
 ```
-
-预期：在 `ROCm0` 上生成对图片内容连贯的自然语言描述。
 
 ---
 
@@ -138,10 +137,9 @@ cd ~/minicpmv-rocm/llama-bin
 
 ---
 
-#### 7. 测试接口（文本 + 图像，并计算 tokens/s）
+#### 7. 测试接口
 
-**文本补全**（与 Qwen3 示例同样的公式
-`completion_tokens / (timings.predicted_ms / 1000)`）：
+**文本补全：**
 
 ```bash
 curl -s -X POST http://127.0.0.1:8080/v1/completions \
@@ -157,7 +155,7 @@ curl -s -X POST http://127.0.0.1:8080/v1/completions \
 '
 ```
 
-**多模态对话**（通过 base64 data URL 在 OpenAI `chat/completions` 接口传图）：
+**多模态对话**（通过 base64 传图）：
 
 ```bash
 IMG_B64=$(base64 -w0 /path/to/image.jpeg)
@@ -173,20 +171,77 @@ curl -s -X POST http://127.0.0.1:8080/v1/chat/completions \
 }' | jq -r '.choices[0].message.content'
 ```
 
-在 **Radeon 8060S（gfx1151），ROCm 7.13，ctx=4096** 上的参考结果：
-
-- 文本解码：**约 190 tokens/s**（MiniCPM-V 4.6 仅 1.3B，因此比 8B 模型快很多）
-- 多模态对话：**约 190 tokens/s** 解码（首轮另含图像编码时间）
-- **tokens/s 取决于你的实际硬件。**
+参考性能（Radeon 8060S，gfx1151，ROCm 7.13，ctx=4096）：文本和多模态解码均约 **190 tokens/s**（首轮多模态请求另含图像编码时间）。实际速度取决于硬件。
 
 ---
 
 ### 二、方式二：Docker 方式（官方 ROCm llama.cpp 镜像）
 
-如果你更习惯使用 Docker，可参考官方文档并在容器内从源码编译，步骤与 Qwen3 / Gemma4 示例完全
-一致 —— MiniCPM-V 唯一的区别是启动时需同时传入 `-m <gguf>` 与 `--mmproj <mmproj-gguf>`：
+> 若使用 Docker，需要安装 `amdgpu-dkms`：
+> https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/docker.html
 
-- https://rocm.docs.amd.com/projects/install-on-linux/en/latest/install/3rd-party/llama-cpp-install.html
+#### 1. 下载容器镜像
+
+```bash
+export MODEL_PATH='~/models'
+
+sudo docker run -it \
+  --name=$(whoami)_llamacpp_minicpmv \
+  --privileged --network=host \
+  --device=/dev/kfd --device=/dev/dri \
+  --group-add video --cap-add=SYS_PTRACE \
+  --security-opt seccomp=unconfined \
+  --ipc=host --shm-size 16G \
+  -v $MODEL_PATH:/data \
+  rocm/dev-ubuntu-24.04:7.0-complete
+```
+
+---
+
+#### 2. 容器内准备工作区
+
+```bash
+apt-get update && apt-get install -y nano libcurl4-openssl-dev cmake git
+mkdir -p /workspace && cd /workspace
+```
+
+---
+
+#### 3. 克隆 llama.cpp 仓库
+
+```bash
+git clone https://github.com/ROCm/llama.cpp
+cd llama.cpp
+```
+
+---
+
+#### 4. 设定 ROCm 架构
+
+```bash
+# 以 AI MAX 395 (gfx1151) 为例
+export LLAMACPP_ROCM_ARCH=gfx1151
+```
+
+---
+
+#### 5. 编译 llama.cpp
+
+```bash
+HIPCXX="$(hipconfig -l)/clang" HIP_PATH="$(hipconfig -R)" \
+cmake -S . -B build \
+  -DGGML_HIP=ON \
+  -DAMDGPU_TARGETS=$LLAMACPP_ROCM_ARCH \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DLLAMA_CURL=ON && \
+cmake --build build --config Release -j$(nproc)
+```
+
+---
+
+#### 6. 运行多模态测试
+
+MiniCPM-V 需要同时传入模型权重和 mmproj 投影文件：
 
 ```bash
 ./build/bin/llama-mtmd-cli \
@@ -197,5 +252,10 @@ curl -s -X POST http://127.0.0.1:8080/v1/chat/completions \
   -p "这张图片里有什么？"
 ```
 
-> 注意：为 ROCm 从源码编译 llama.cpp（`-DGGML_HIP=ON -DAMDGPU_TARGETS=gfx1151`）的完整步骤见
-> `qwen3/llamacpp-rocm7-deploy.md`；MiniCPM-V 只需额外的多模态支持与 `mmproj` 文件。
+---
+
+### 效果截图
+
+<div align='center'>
+    <img src="../../../public/images/01-deploy/minicpmv/minicpmv-example.png" alt="MiniCPM-V 4.6 llama.cpp 多模态示例" width="90%">
+</div>

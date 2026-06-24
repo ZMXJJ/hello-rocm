@@ -1,14 +1,18 @@
 ## llama.cpp Deployment of MiniCPM (Ubuntu 24.04 + ROCm 7+)
 
-This section explains how to deploy the **text** LLM **MiniCPM5-1B** for local inference with
-**llama.cpp** on an AMD GPU (Ubuntu 24.04 + ROCm 7+).
+### Model Overview
 
-It follows the same prebuilt-binary flow as the `qwen3/llamacpp-rocm7-deploy.md` example.
-Unlike the multimodal `minicpmv/` guide, MiniCPM is **text-only**, so there is **no `mmproj`
-projector** — you load a single GGUF and use the standard `llama-cli` / `llama-server`.
+[MiniCPM](https://github.com/OpenBMB/MiniCPM) is an on-device large language model series developed by ModelBest and Tsinghua University NLP Lab (OpenBMB). MiniCPM5-1B is the latest text-only model in the series, with only 1B parameters and support for Think / No-think reasoning modes.
 
-The example model is **MiniCPM5-1B Q4_K_M (GGUF)** — a compact 1B dense model built for
-on-device / edge deployment.
+- Model: [openbmb/MiniCPM5-1B](https://huggingface.co/openbmb/MiniCPM5-1B)
+- GGUF: [openbmb/MiniCPM5-1B-GGUF](https://huggingface.co/openbmb/MiniCPM5-1B-GGUF)
+
+This guide deploys **MiniCPM5-1B Q4_K_M (GGUF)** using **llama.cpp**, covering:
+
+- Prebuilt executables (recommended)
+- Docker + official ROCm image for building from source
+
+MiniCPM is text-only — a single GGUF file with standard `llama-cli` / `llama-server`. For multimodal (image + text), see the `minicpmv/` directory.
 
 > Prerequisite: ROCm 7+ system installation and verification is complete
 > (see `env-prepare-ubuntu24-rocm7.md`). Verified on **AMD Ryzen AI MAX+ 395 (Radeon 8060S,
@@ -38,9 +42,6 @@ curl -L -o llama-rocm-gfx1151.zip \
 mkdir -p llama-bin && unzip -q llama-rocm-gfx1151.zip -d llama-bin
 ```
 
-> If you already set up llama.cpp for the `minicpmv/` (MiniCPM-V) guide, you can reuse the same
-> `llama-bin/` directory here — the binaries are identical; only the model differs.
-
 ---
 
 #### 2. Verify ROCm 7+ Installation (Must Be System-level ROCm)
@@ -57,7 +58,7 @@ TARGET_GRAPHICS_VERSION: gfx1151
 ROCm version: 7.13.0
 ```
 
-Confirm llama.cpp sees the GPU through ROCm:
+Confirm llama.cpp can see the GPU:
 
 ```bash
 cd ~/minicpm-rocm/llama-bin
@@ -69,7 +70,7 @@ export LD_LIBRARY_PATH=$PWD:/opt/rocm/lib:$LD_LIBRARY_PATH
 
 ---
 
-#### 3. Enter the llama Backend Directory and Set Permissions / Environment Variables
+#### 3. Set Permissions and Environment Variables
 
 ```bash
 cd ~/minicpm-rocm/llama-bin
@@ -77,22 +78,21 @@ chmod +x llama-cli llama-server
 export LD_LIBRARY_PATH=$PWD:/opt/rocm/lib:$LD_LIBRARY_PATH
 ```
 
-> Note: the Lemonade build bundles its own ROCm runtime libraries next to the binaries, so put
-> the backend directory itself on `LD_LIBRARY_PATH` (the `$PWD` above) in addition to `/opt/rocm/lib`.
+> The Lemonade build bundles its own ROCm runtime libraries next to the binaries, so add `$PWD` to `LD_LIBRARY_PATH` in addition to `/opt/rocm/lib`.
 
 ---
 
 #### 4. Download the MiniCPM5-1B GGUF
 
-llama.cpp uses the **GGUF model format**. MiniCPM5-1B ships ready-made GGUFs:
+llama.cpp uses the **GGUF model format**. Available quantizations:
 
-| File | Size | Use case |
+| File | Size | Notes |
 | --- | --- | --- |
-| `MiniCPM5-1B-F16.gguf` | 2.1 GB | reference quality |
-| `MiniCPM5-1B-Q8_0.gguf` | 1.1 GB | tiny quality drop vs F16 |
-| `MiniCPM5-1B-Q4_K_M.gguf` | 657 MB | edge / minimal VRAM |
+| `MiniCPM5-1B-F16.gguf` | 2.1 GB | Full precision |
+| `MiniCPM5-1B-Q8_0.gguf` | 1.1 GB | Minimal quality loss |
+| `MiniCPM5-1B-Q4_K_M.gguf` | 657 MB | For limited VRAM |
 
-Using the Chinese Hugging Face mirror `https://hf-mirror.com/`:
+Using the Chinese Hugging Face mirror:
 
 ```bash
 mkdir -p ~/models/MiniCPM5-1B-GGUF && cd ~/models/MiniCPM5-1B-GGUF
@@ -102,8 +102,7 @@ curl -L --fail -o MiniCPM5-1B-Q4_K_M.gguf \
   "https://hf-mirror.com/openbmb/MiniCPM5-1B-GGUF/resolve/main/MiniCPM5-1B-Q4_K_M.gguf"
 ```
 
-> Tip: you can also use `huggingface-cli download openbmb/MiniCPM5-1B-GGUF MiniCPM5-1B-Q4_K_M.gguf`,
-> or `hfd.sh` + `aria2` for faster, resumable downloads.
+> You can also use `huggingface-cli download` or `hfd.sh` + `aria2` for resumable downloads.
 
 ---
 
@@ -113,14 +112,12 @@ curl -L --fail -o MiniCPM5-1B-Q4_K_M.gguf \
 cd ~/minicpm-rocm/llama-bin
 export LD_LIBRARY_PATH=$PWD:/opt/rocm/lib:$LD_LIBRARY_PATH
 
-# Interactive chat (auto-applies the chat template)
 ./llama-cli \
   -m ~/models/MiniCPM5-1B-GGUF/MiniCPM5-1B-Q4_K_M.gguf \
   -ngl 99 -c 4096 --temp 0.7 --top-p 0.95 -n 2048
 ```
 
-Expected: coherent generation on `ROCm0`. MiniCPM5-1B is a reasoning model and may emit a
-`[Start thinking]` block before its final answer.
+MiniCPM5-1B supports reasoning mode and may emit a `[Start thinking]` block before its final answer.
 
 ---
 
@@ -139,7 +136,7 @@ cd ~/minicpm-rocm/llama-bin
 
 ---
 
-#### 7. Test the API (chat + tokens/s)
+#### 7. Test the API
 
 ```bash
 curl -s -X POST http://127.0.0.1:8080/v1/chat/completions \
@@ -155,25 +152,82 @@ curl -s -X POST http://127.0.0.1:8080/v1/chat/completions \
 '
 ```
 
-Reference result on **Radeon 8060S (gfx1151), ROCm 7.13, ctx=8192**:
+Reference: **~185 tokens/s** decode on Radeon 8060S (gfx1151), ROCm 7.13, ctx=8192. Actual speed depends on hardware.
 
-- Decode: **~185 tokens/s** (MiniCPM5-1B is a 1B model, so much faster than an 8B model)
-- **tokens/s depends on your actual hardware.**
-
-#### Generation parameters
+#### Generation Parameters
 
 | Mode | `--temp` | `--top-p` | When to use |
 | --- | --- | --- | --- |
-| Think | 0.9 | 0.95 | reasoning, math, code, multi-step |
-| No-think | 0.7 | 0.95 | fast assistant, latency-bound |
+| Think | 0.9 | 0.95 | reasoning, math, code |
+| No-think | 0.7 | 0.95 | fast assistant, low latency |
 
 ---
 
-### Method 2: Docker Method / Build from Source
+### Method 2: Docker (Official ROCm llama.cpp Image)
 
-If you prefer Docker or want to build llama.cpp from source for ROCm
-(`-DGGML_HIP=ON -DAMDGPU_TARGETS=gfx1151`), the steps are identical to the Qwen3 guide
-(`qwen3/llamacpp-rocm7-deploy.md`); MiniCPM is text-only, so no extra flags are needed at runtime:
+> Docker requires `amdgpu-dkms`:
+> https://rocm.docs.amd.com/projects/install-on-linux/en/latest/how-to/docker.html
+
+#### 1. Start the Container
+
+```bash
+export MODEL_PATH='~/models'
+
+sudo docker run -it \
+  --name=$(whoami)_llamacpp_minicpm \
+  --privileged --network=host \
+  --device=/dev/kfd --device=/dev/dri \
+  --group-add video --cap-add=SYS_PTRACE \
+  --security-opt seccomp=unconfined \
+  --ipc=host --shm-size 16G \
+  -v $MODEL_PATH:/data \
+  rocm/dev-ubuntu-24.04:7.0-complete
+```
+
+---
+
+#### 2. Prepare the Workspace
+
+```bash
+apt-get update && apt-get install -y nano libcurl4-openssl-dev cmake git
+mkdir -p /workspace && cd /workspace
+```
+
+---
+
+#### 3. Clone llama.cpp
+
+```bash
+git clone https://github.com/ROCm/llama.cpp
+cd llama.cpp
+```
+
+---
+
+#### 4. Set ROCm Architecture
+
+```bash
+# AI MAX 395 (gfx1151) example
+export LLAMACPP_ROCM_ARCH=gfx1151
+```
+
+---
+
+#### 5. Build llama.cpp
+
+```bash
+HIPCXX="$(hipconfig -l)/clang" HIP_PATH="$(hipconfig -R)" \
+cmake -S . -B build \
+  -DGGML_HIP=ON \
+  -DAMDGPU_TARGETS=$LLAMACPP_ROCM_ARCH \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DLLAMA_CURL=ON && \
+cmake --build build --config Release -j$(nproc)
+```
+
+---
+
+#### 6. Run the Test
 
 ```bash
 ./build/bin/llama-cli \
@@ -181,9 +235,9 @@ If you prefer Docker or want to build llama.cpp from source for ROCm
   -ngl 99 -c 4096 -p "Explain AMD ROCm in two sentences."
 ```
 
-#### Build a GGUF from your own checkpoint
+#### Build a GGUF from Your Own Checkpoint
 
-If you fine-tuned your own MiniCPM5-1B variant and want a GGUF, convert + quantize with llama.cpp:
+If you fine-tuned your own MiniCPM5-1B variant:
 
 ```bash
 python ./convert_hf_to_gguf.py /path/to/your-MiniCPM5-fp16-hf --outfile F16.gguf --outtype f16
@@ -192,13 +246,8 @@ python ./convert_hf_to_gguf.py /path/to/your-MiniCPM5-fp16-hf --outfile F16.gguf
 
 ---
 
-### See also
+### Screenshot Example
 
-- `minicpmv/llamacpp-rocm7-deploy.md` — the **multimodal** MiniCPM-V on llama.cpp (adds an `mmproj`
-  projector + `llama-mtmd-cli` for image input).
-- `qwen3/llamacpp-rocm7-deploy.md` — the reference text-model llama.cpp flow this guide mirrors.
-
-
-### After build
-Screenshot example:
-<img width="955" height="1144" alt="MiniCPM5 example" src="https://github.com/user-attachments/assets/45f68b83-7177-49e8-96d8-10c9bb302654" />
+<div align='center'>
+    <img src="../../../public/images/01-deploy/minicpm/minicpm5-example.jpg" alt="MiniCPM5-1B llama.cpp example" width="90%">
+</div>
