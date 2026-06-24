@@ -197,3 +197,8 @@ python ./convert_hf_to_gguf.py /path/to/your-MiniCPM5-fp16-hf --outfile F16.gguf
 - `minicpmv/llamacpp-rocm7-deploy.md` — the **multimodal** MiniCPM-V on llama.cpp (adds an `mmproj`
   projector + `llama-mtmd-cli` for image input).
 - `qwen3/llamacpp-rocm7-deploy.md` — the reference text-model llama.cpp flow this guide mirrors.
+
+
+### After build
+Screenshot example:
+<img width="955" height="1144" alt="MiniCPM5 example" src="https://github.com/user-attachments/assets/45f68b83-7177-49e8-96d8-10c9bb302654" />
