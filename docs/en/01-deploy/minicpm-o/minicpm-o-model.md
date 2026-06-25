@@ -8,15 +8,27 @@ This page introduces the **MiniCPM-o 4.5** omni-modal architecture, sub-model br
 
 ### 1. What is MiniCPM-o
 
-MiniCPM-o (Omni) is an end-side omni-modal model series from OpenBMB. Version 4.5 is built on an ~8B parameter LLM backbone and integrates the following capabilities:
+MiniCPM-o (Omni) is an end-to-end omni-modal model series from OpenBMB. Version 4.5 has approximately **9B total parameters**, composed of four backbone modules:
+
+| Backbone Module | Base Model |
+|-----------------|------------|
+| LLM backbone | **Qwen3-8B** |
+| Vision encoder | **SigLIP2** |
+| Audio encoder | **Whisper-medium** |
+| Speech synthesis (TTS) | **CosyVoice2** |
+
+> The model is **built in an end-to-end fashion** — the modality encoders/decoders and LLM are densely connected via hidden states, enabling better information flow and control, and facilitating full exploitation of rich multimodal knowledge during training.
+
+Based on this architecture, MiniCPM-o 4.5 integrates the following capabilities:
 
 | Capability | Description |
 |------------|-------------|
-| **Text chat** | Same as a regular LLM, supports multi-turn conversation and system prompts |
-| **Voice input** | Real-time audio stream encoding, understands spoken input |
-| **Image understanding** | Visual question answering on single images |
-| **Voice output (TTS)** | Natural speech synthesis via token2wav, supports voice cloning |
-| **Full-duplex conversation** | Simultaneously listens to the microphone and generates voice responses, like a real phone call |
+| **Text chat** | Same as a regular LLM, supports multi-turn conversation and system prompts, 30+ languages |
+| **Voice input** | Real-time audio stream encoding, understands spoken input (bilingual real-time speech in Chinese & English) |
+| **Image / Video understanding** | High-resolution images (up to 1.8M pixels) and high-FPS video understanding (up to 10fps) |
+| **Voice output (TTS)** | Natural speech synthesis, supports voice cloning, emotion control, and long speech generation (>1 min) |
+| **Full-duplex conversation** | Simultaneously listens to the microphone and generates voice responses, input and output streams do not block each other |
+| **Proactive interaction** | Monitors input streams at ~1Hz frequency, can initiate unprompted responses based on continuous scene understanding |
 
 Compared to a pure text model of the same parameter count, MiniCPM-o 4.5 achieves a full-duplex response latency of approximately **800 ms**, enabling near-real-time voice interaction on edge devices.
 
@@ -28,11 +40,11 @@ MiniCPM-o 4.5 consists of multiple independent modules, each loaded as a separat
 
 ```
 MiniCPM-o 4.5 (full omni inference)
-├── LLM (backbone)          MiniCPM-o-4_5-Q4_K_M.gguf             ~4.9 GB
-├── Vision encoder          vision/MiniCPM-o-4_5-vision-F16.gguf  ~0.9 GB
-├── Audio encoder           audio/MiniCPM-o-4_5-audio-F16.gguf    ~1.2 GB
-├── TTS language model      tts/MiniCPM-o-4_5-tts-F16.gguf        ~0.5 GB
-├── TTS projector           tts/MiniCPM-o-4_5-projector-F16.gguf  ~0.1 GB
+├── LLM (Qwen3-8B)             MiniCPM-o-4_5-Q4_K_M.gguf             ~4.9 GB
+├── Vision encoder (SigLIP2)    vision/MiniCPM-o-4_5-vision-F16.gguf  ~0.9 GB
+├── Audio encoder               audio/MiniCPM-o-4_5-audio-F16.gguf ~1.2 GB
+├── TTS language model          tts/MiniCPM-o-4_5-tts-F16.gguf   ~0.5 GB
+├── TTS projector               tts/MiniCPM-o-4_5-projector-F16.gguf  ~0.1 GB
 └── Token-to-Wav (vocoder)
     ├── token2wav-gguf/encoder.gguf
     ├── token2wav-gguf/flow_matching.gguf
